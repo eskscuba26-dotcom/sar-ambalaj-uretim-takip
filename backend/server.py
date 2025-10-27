@@ -101,6 +101,7 @@ class Production(BaseModel):
     square_meters: float
     quantity: int
     masura_model: Literal["100", "120", "150", "200"]
+    color: Optional[str] = None  # Renk (opsiyonel)
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     created_by: str
 
@@ -112,6 +113,7 @@ class ProductionCreate(BaseModel):
     length_m: float
     quantity: int
     masura_model: Literal["100", "120", "150", "200"]
+    color: Optional[str] = None  # Renk (opsiyonel)
 
 class Stock(BaseModel):
     model_config = ConfigDict(extra="ignore")
