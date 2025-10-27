@@ -513,6 +513,8 @@ const RawMaterialsPage = () => {
     price: '',
     currency: 'TL',
   });
+  const [customMaterialName, setCustomMaterialName] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
 
   useEffect(() => {
     fetchMaterials();
