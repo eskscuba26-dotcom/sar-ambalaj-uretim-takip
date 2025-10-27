@@ -994,8 +994,8 @@ const ProductionPage = () => {
               <TableBody>
                 {productions.map((prod) => (
                   <TableRow className="border-gray-800 hover:bg-gray-900" key={prod.id} data-testid={`production-row-${prod.id}`}>
-                    <TableCell>{new Date(prod.date).toLocaleDateString('tr-TR')}</TableCell>
-                    <TableCell>{prod.machine}</TableCell>
+                    <TableCell className="text-gray-300">{new Date(prod.date).toLocaleDateString('tr-TR')}</TableCell>
+                    <TableCell className="text-gray-300">{prod.machine}</TableCell>
                     <TableCell className="text-sm">
                       {prod.thickness_mm}mm x {prod.width_cm}cm x {prod.length_m}m
                     </TableCell>
@@ -1265,7 +1265,7 @@ const UsersPage = () => {
                       {user.role === 'admin' ? 'Admin' : 'Görüntüleyici'}
                     </span>
                   </TableCell>
-                  <TableCell>{new Date(user.created_at).toLocaleDateString('tr-TR')}</TableCell>
+                  <TableCell className="text-gray-300">{new Date(user.created_at).toLocaleDateString('tr-TR')}</TableCell>
                   <TableCell>
                     <Button size="sm" variant="destructive" onClick={() => setDeleteId(user.id)} data-testid={`delete-user-${user.id}`}>
                       Sil
