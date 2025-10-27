@@ -434,6 +434,32 @@ const Hammadde = ({ user, setUser }) => {
             </Table>
           )}
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <AlertDialogContent className="bg-zinc-900 border-zinc-800 text-white">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-xl" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                Silme Onayı
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-zinc-400">
+                Bu hammadde kaydını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700" data-testid="delete-cancel-button">
+                İptal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleDelete(deletingMaterialId)}
+                className="bg-red-600 hover:bg-red-700 text-white"
+                data-testid="delete-confirm-button"
+              >
+                Sil
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
     </div>
   );
