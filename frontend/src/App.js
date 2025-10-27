@@ -1746,6 +1746,7 @@ function App() {
                     <Route path="/uretim" element={<ProductionPage />} />
                     <Route path="/maliyet" element={<CostCalculationPage />} />
                     <Route path="/stok" element={<StockPage />} />
+                    <Route path="/kesilmis-urun" element={<CutProductsPage />} />
                     <Route path="/sevkiyat" element={<ShipmentPage />} />
                     <Route path="/users" element={<UsersPage />} />
                   </Routes>
