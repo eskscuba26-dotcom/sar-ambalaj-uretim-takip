@@ -158,6 +158,39 @@ class ShipmentCreate(BaseModel):
     driver_name: str
     departure_time: str
 
+class CutProduct(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str
+    # Ana malzeme bilgisi
+    source_thickness_mm: float
+    source_width_cm: float
+    source_length_m: float
+    source_square_meters: float
+    # İstenilen ebat
+    target_thickness_mm: float
+    target_width_cm: float
+    target_length_cm: float
+    target_square_meters: float
+    # Hesaplama
+    pieces_per_roll: int  # Bir bobinden kaç adet çıkar
+    rolls_used: int  # Kullanılan bobin adedi
+    total_pieces: int  # Toplam kesilen parça adedi
+    color: Optional[str] = None
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_by: str
+
+class CutProductCreate(BaseModel):
+    date: str
+    source_thickness_mm: float
+    source_width_cm: float
+    source_length_m: float
+    target_thickness_mm: float
+    target_width_cm: float
+    target_length_cm: float
+    rolls_used: int
+    color: Optional[str] = None
+
 # ============ AUTH HELPERS ============
 
 def hash_password(password: str) -> str:
