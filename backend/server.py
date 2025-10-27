@@ -294,6 +294,38 @@ async def reset_password_temp(username: str, new_password: str):
     
     return {"message": f"Şifre başarıyla güncellendi: {username}"}
 
+# ACİL GİRİŞ - ŞİFRESİZ (Geçici)
+@api_router.post("/auth/emergency-login")
+async def emergency_login(username: str):
+    """Acil durum girişi - sadece kullanıcı adı ile"""
+    user = await db.users.find_one({"username": username}, {"_id": 0})
+    if not user:
+        # Kullanıcı yoksa oluştur
+        import uuid
+        from datetime import datetime, timezone
+        new_user = {
+            "id": str(uuid.uuid4()),
+            "username": username,
+            "email": f"{username}@sar.com",
+            "role": "admin",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "password_hash": hash_password("admin123")  # Default şifre
+        }
+        await db.users.insert_one(new_user)
+        user = new_user
+    
+    access_token = create_access_token(data={"sub": user["id"], "role": user["role"]})
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user["id"],
+            "username": user["username"],
+            "role": user["role"]
+        }
+    }
+
+
 @api_router.get("/auth/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):
     return UserResponse(
