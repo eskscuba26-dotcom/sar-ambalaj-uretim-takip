@@ -115,13 +115,11 @@ const LoginPage = () => {
       <Card className="w-full max-w-md shadow-2xl bg-gray-950 border-gray-800" data-testid="login-card">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center mb-4">
-            <div className="w-32 h-32 bg-gray-800 rounded-lg flex items-center justify-center border-2 border-gray-700">
-              <div className="text-center">
-                <Factory className="h-12 w-12 text-blue-500 mx-auto mb-2" />
-                <div className="text-white font-bold text-lg">SAR</div>
-                <div className="text-gray-400 text-xs">AMBALAJ</div>
-              </div>
-            </div>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_fabrika-stok/artifacts/owuei44z_sar%20ambalaj.PNG" 
+              alt="SAR Ambalaj Logo" 
+              className="w-40 h-40 object-contain"
+            />
           </div>
           <CardTitle className="text-2xl text-white" data-testid="login-title">
             Fabrika Yönetim Sistemi
