@@ -531,6 +531,8 @@ async def update_stock_from_shipment(shipment: Shipment, is_delete: bool = False
     width = int(shipment.width_cm) if shipment.width_cm == int(shipment.width_cm) else shipment.width_cm
     length = int(shipment.length_m) if shipment.length_m == int(shipment.length_m) else shipment.length_m
     model_name = f"{thickness}mm x {width}cm x {length}m"
+    if shipment.color:
+        model_name += f" - {shipment.color}"
     
     existing = await db.stock.find_one({"model_name": model_name})
     
