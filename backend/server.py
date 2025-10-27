@@ -339,6 +339,73 @@ async def delete_raw_material(
         raise HTTPException(status_code=404, detail="Hammadde bulunamadı")
     return {"message": "Hammadde silindi"}
 
+# Exchange Rate endpoints
+@api_router.get("/kurlar", response_model=List[ExchangeRate])
+async def get_exchange_rates(current_user: User = Depends(get_current_user)):
+    rates = await db.exchange_rates.find({}, {"_id": 0}).to_list(1000)
+    for rate in rates:
+        if isinstance(rate.get('created_at'), str):
+            rate['created_at'] = datetime.fromisoformat(rate['created_at'])
+        if isinstance(rate.get('updated_at'), str):
+            rate['updated_at'] = datetime.fromisoformat(rate['updated_at'])
+    return rates
+
+@api_router.get("/kurlar/latest")
+async def get_latest_exchange_rates(current_user: User = Depends(get_current_user)):
+    # Get the most recent exchange rate
+    rates = await db.exchange_rates.find({}, {"_id": 0}).sort("tarih", -1).limit(1).to_list(1)
+    if not rates:
+        return {"usd": 1.0, "eur": 1.0}  # Default rates if none exist
+    return {"usd": rates[0]["usd"], "eur": rates[0]["eur"]}
+
+@api_router.post("/kurlar", response_model=ExchangeRate)
+async def create_exchange_rate(
+    rate: ExchangeRateCreate,
+    current_user: User = Depends(require_admin)
+):
+    rate_obj = ExchangeRate(
+        **rate.model_dump(),
+        created_by=current_user.username
+    )
+    doc = rate_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.exchange_rates.insert_one(doc)
+    return rate_obj
+
+@api_router.put("/kurlar/{rate_id}", response_model=ExchangeRate)
+async def update_exchange_rate(
+    rate_id: str,
+    rate_update: ExchangeRateUpdate,
+    current_user: User = Depends(require_admin)
+):
+    existing = await db.exchange_rates.find_one({"id": rate_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Kur bulunamadı")
+    
+    update_data = rate_update.model_dump(exclude_unset=True)
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.exchange_rates.update_one({"id": rate_id}, {"$set": update_data})
+    
+    updated = await db.exchange_rates.find_one({"id": rate_id}, {"_id": 0})
+    if isinstance(updated.get('created_at'), str):
+        updated['created_at'] = datetime.fromisoformat(updated['created_at'])
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return ExchangeRate(**updated)
+
+@api_router.delete("/kurlar/{rate_id}")
+async def delete_exchange_rate(
+    rate_id: str,
+    current_user: User = Depends(require_admin)
+):
+    result = await db.exchange_rates.delete_one({"id": rate_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Kur bulunamadı")
+    return {"message": "Kur silindi"}
+
 # Include router
 app.include_router(api_router)
 
