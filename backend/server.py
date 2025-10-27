@@ -466,6 +466,7 @@ async def update_stock_from_production(production: Production):
             length_m=production.length_m,
             square_meters=production.square_meters,
             color=production.color,
+            is_cut=False,  # Üretim ürünleri kesilmemiş
             quantity=production.quantity
         )
         await db.stock.insert_one(stock.model_dump())
