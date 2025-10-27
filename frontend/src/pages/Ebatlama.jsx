@@ -112,6 +112,13 @@ const Ebatlama = ({ user, setUser }) => {
     return Math.floor(anaMetrekare / ebatMetrekare);
   };
 
+  const calculateTuketilenAnaUrun = () => {
+    const cikanAdet = calculateCikanAdet();
+    const istenenAdet = parseInt(formData.istenen_adet) || 0;
+    if (cikanAdet === 0) return 0;
+    return (istenenAdet / cikanAdet).toFixed(2);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
