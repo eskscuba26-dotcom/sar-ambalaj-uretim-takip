@@ -418,43 +418,44 @@ const ExchangeRatesPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900" data-testid="exchange-rates-title">Döviz Kuru</h1>
+        <h1 className="text-3xl font-bold text-white" data-testid="exchange-rates-title">Döviz Kuru</h1>
         {user?.role === 'admin' && (
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button data-testid="add-exchange-rate-button">Kur Güncelle</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-exchange-rate-button">Kur Güncelle</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-gray-950 border-gray-800">
               <DialogHeader>
-                <DialogTitle>Döviz Kuru Güncelle</DialogTitle>
+                <DialogTitle className="text-white">Döviz Kuru Güncelle</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label>Döviz</Label>
+                  <Label className="text-gray-300">Döviz</Label>
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger data-testid="currency-select">
+                    <SelectTrigger data-testid="currency-select" className="bg-gray-900 border-gray-700 text-white">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-gray-900 border-gray-700">
                       <SelectItem value="USD">USD</SelectItem>
                       <SelectItem value="EUR">EUR</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="rate">Kur (TL)</Label>
+                  <Label htmlFor="rate" className="text-gray-300">Kur (TL)</Label>
                   <Input
                     id="rate"
                     type="number"
                     step="0.01"
                     data-testid="rate-input"
+                    className="bg-gray-900 border-gray-700 text-white"
                     value={rate}
                     onChange={(e) => setRate(e.target.value)}
                     required
                   />
                 </div>
                 <DialogFooter>
-                  <Button type="submit" data-testid="save-exchange-rate-button">Kaydet</Button>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-exchange-rate-button">Kaydet</Button>
                 </DialogFooter>
               </form>
             </DialogContent>
@@ -462,28 +463,28 @@ const ExchangeRatesPage = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm">
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
         <div className="p-6">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Döviz</TableHead>
-                <TableHead>Kur (TL)</TableHead>
-                <TableHead>Güncellenme</TableHead>
-                <TableHead>Güncelleyen</TableHead>
+              <TableRow className="border-gray-800 hover:bg-gray-900">
+                <TableHead className="text-gray-400">Döviz</TableHead>
+                <TableHead className="text-gray-400">Kur (TL)</TableHead>
+                <TableHead className="text-gray-400">Güncellenme</TableHead>
+                <TableHead className="text-gray-400">Güncelleyen</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {rates.map((r) => (
-                <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`}>
-                  <TableCell className="font-medium">{r.currency}</TableCell>
-                  <TableCell>{r.rate.toFixed(2)}</TableCell>
-                  <TableCell>{new Date(r.updated_at).toLocaleString('tr-TR')}</TableCell>
-                  <TableCell>{r.updated_by}</TableCell>
+                <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`} className="border-gray-800 hover:bg-gray-900">
+                  <TableCell className="font-medium text-white">{r.currency}</TableCell>
+                  <TableCell className="text-gray-300">{r.rate.toFixed(2)}</TableCell>
+                  <TableCell className="text-gray-400">{new Date(r.updated_at).toLocaleString('tr-TR')}</TableCell>
+                  <TableCell className="text-gray-400">{r.updated_by}</TableCell>
                 </TableRow>
               ))}
               {rates.length === 0 && (
-                <TableRow>
+                <TableRow className="border-gray-800">
                   <TableCell colSpan={4} className="text-center text-gray-500">
                     Henüz kur girilmemiş
                   </TableCell>
