@@ -57,6 +57,7 @@ const Ebatlama = ({ user, setUser }) => {
     ebat_kalinlik: '',
     ebat_en: '',
     ebat_boy: '',
+    istenen_adet: '',
   });
 
   const token = localStorage.getItem('token');
