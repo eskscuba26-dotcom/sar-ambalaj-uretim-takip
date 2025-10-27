@@ -1202,12 +1202,14 @@ const ShipmentPage = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingShipment, setEditingShipment] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const [colorOptions, setColorOptions] = useState([]);
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     thickness_mm: '',
     width_cm: '',
     length_m: '',
     quantity: '',
+    color: 'none',
     customer_name: '',
     vehicle_plate: '',
     driver_name: '',
@@ -1216,7 +1218,17 @@ const ShipmentPage = () => {
 
   useEffect(() => {
     fetchShipments();
+    fetchColorOptions();
   }, []);
+
+  const fetchColorOptions = async () => {
+    try {
+      const response = await axios.get(`${API}/raw-materials/colors`);
+      setColorOptions(response.data);
+    } catch (error) {
+      console.error('Renk seçenekleri yüklenemedi');
+    }
+  };
 
   const fetchShipments = async () => {
     try {
