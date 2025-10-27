@@ -152,10 +152,15 @@ const Dashboard = ({ user, setUser }) => {
                   <p className="text-xs text-zinc-500 mt-1">metrekare</p>
                 </div>
 
-                <div className="bg-zinc-900/30 border border-zinc-800 border-dashed rounded-xl p-6 flex items-center justify-center">
-                  <p className="text-zinc-600 text-sm text-center">
-                    Stok bilgileri<br />yakında eklenecek
+                <div className="bg-gradient-to-br from-orange-900/30 to-orange-800/20 border border-orange-700/50 rounded-xl p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <Boxes className="h-5 w-5 text-orange-400" />
+                  </div>
+                  <h4 className="text-zinc-300 text-sm mb-2">Kesilmiş Ürün Stok</h4>
+                  <p className="text-3xl font-bold text-orange-400">
+                    {cuttings.reduce((sum, cut) => sum + cut.istenen_adet, 0).toLocaleString('tr-TR')}
                   </p>
+                  <p className="text-xs text-zinc-500 mt-1">adet</p>
                 </div>
               </div>
             </div>
