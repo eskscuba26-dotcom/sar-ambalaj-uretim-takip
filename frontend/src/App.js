@@ -180,7 +180,7 @@ const LoginPage = () => {
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const menuItems = [
     { path: '/', label: 'Ana Sayfa', icon: Factory },
@@ -193,18 +193,36 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <nav className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+    <div className="min-h-screen bg-gray-900 flex">
+      {/* Sidebar */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-950 border-r border-gray-800 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        <div className="h-full flex flex-col">
+          {/* Logo/Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
             <div className="flex items-center">
-              <Factory className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">Fabrika Yönetim</span>
+              <Factory className="h-8 w-8 text-blue-500" />
+              <span className="ml-3 text-lg font-bold text-white">SAR Ambalaj</span>
             </div>
-            
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-1">
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden text-gray-400 hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* User Info */}
+          <div className="px-6 py-4 border-b border-gray-800">
+            <div className="text-sm text-gray-400">Hoş geldiniz</div>
+            <div className="text-white font-medium mt-1">{user?.full_name}</div>
+            <div className="text-xs text-gray-500 mt-1">
+              {user?.role === 'admin' ? 'Admin' : 'Görüntüleyici'}
+            </div>
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className="flex-1 px-3 py-4 overflow-y-auto">
+            <div className="space-y-1">
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.path;
@@ -213,60 +231,10 @@ const Layout = ({ children }) => {
                     key={item.path}
                     to={item.path}
                     data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
-                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4 mr-2" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700 hidden sm:block">
-                {user?.full_name} ({user?.role === 'admin' ? 'Admin' : 'Görüntüleyici'})
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                data-testid="logout-button"
-                onClick={logout}
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
-              
-              {/* Mobile menu button */}
-              <button
-                className="md:hidden p-2"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                data-testid="mobile-menu-button"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {menuItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center px-3 py-2 rounded-md text-base font-medium ${
-                      isActive
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                     }`}
                   >
                     <Icon className="h-5 w-5 mr-3" />
@@ -275,14 +243,49 @@ const Layout = ({ children }) => {
                 );
               })}
             </div>
+          </nav>
+
+          {/* Logout Button */}
+          <div className="px-3 py-4 border-t border-gray-800">
+            <Button
+              variant="outline"
+              className="w-full bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white"
+              data-testid="logout-button"
+              onClick={logout}
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Çıkış Yap
+            </Button>
           </div>
-        )}
-      </nav>
+        </div>
+      </aside>
+
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+      <div className="flex-1 lg:ml-64">
+        {/* Top Bar */}
+        <header className="bg-gray-950 border-b border-gray-800 px-6 py-4 lg:hidden">
+          <button 
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-300 hover:text-white"
+            data-testid="mobile-menu-button"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </header>
+
+        {/* Page Content */}
+        <main className="p-6 lg:p-8">
+          {children}
+        </main>
+      </div>
     </div>
   );
 };
