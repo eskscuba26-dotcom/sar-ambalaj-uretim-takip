@@ -52,6 +52,10 @@ function App() {
           path="/kurlar"
           element={user ? <Kurlar user={user} setUser={setUser} /> : <Navigate to="/login" />}
         />
+        <Route
+          path="/uretim"
+          element={user ? <Uretim user={user} setUser={setUser} /> : <Navigate to="/login" />}
+        />
       </Routes>
     </BrowserRouter>
   );
