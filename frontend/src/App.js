@@ -449,8 +449,8 @@ const ExchangeRatesPage = () => {
         )}
       </div>
 
-      <Card>
-        <CardContent className="pt-6">
+      <div className="bg-white rounded-lg border shadow-sm">
+        <div className="p-6">
           <Table>
             <TableHeader>
               <TableRow>
@@ -478,8 +478,8 @@ const ExchangeRatesPage = () => {
               )}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
