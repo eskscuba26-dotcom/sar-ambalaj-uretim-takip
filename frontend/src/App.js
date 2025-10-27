@@ -132,8 +132,8 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <Label htmlFor="fullName" className="text-gray-300">Ad Soyad</Label>
-                <Input
+                <Label className="text-gray-300" htmlFor="fullName" className="text-gray-300">Ad Soyad</Label>
+                <Input className="bg-gray-900 border-gray-700 text-white"
                   id="fullName"
                   data-testid="fullname-input"
                   className="bg-gray-900 border-gray-700 text-white"
@@ -144,8 +144,8 @@ const LoginPage = () => {
               </div>
             )}
             <div>
-              <Label htmlFor="email" className="text-gray-300">E-posta</Label>
-              <Input
+              <Label className="text-gray-300" htmlFor="email" className="text-gray-300">E-posta</Label>
+              <Input className="bg-gray-900 border-gray-700 text-white"
                 id="email"
                 type="email"
                 data-testid="email-input"
@@ -156,8 +156,8 @@ const LoginPage = () => {
               />
             </div>
             <div>
-              <Label htmlFor="password" className="text-gray-300">Şifre</Label>
-              <Input
+              <Label className="text-gray-300" htmlFor="password" className="text-gray-300">Şifre</Label>
+              <Input className="bg-gray-900 border-gray-700 text-white"
                 id="password"
                 type="password"
                 data-testid="password-input"
@@ -430,7 +430,7 @@ const ExchangeRatesPage = () => {
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label className="text-gray-300">Döviz</Label>
+                  <Label className="text-gray-300" className="text-gray-300">Döviz</Label>
                   <Select value={currency} onValueChange={setCurrency}>
                     <SelectTrigger data-testid="currency-select" className="bg-gray-900 border-gray-700 text-white">
                       <SelectValue />
@@ -442,8 +442,8 @@ const ExchangeRatesPage = () => {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="rate" className="text-gray-300">Kur (TL)</Label>
-                  <Input
+                  <Label className="text-gray-300" htmlFor="rate" className="text-gray-300">Kur (TL)</Label>
+                  <Input className="bg-gray-900 border-gray-700 text-white"
                     id="rate"
                     type="number"
                     step="0.01"
@@ -614,8 +614,8 @@ const RawMaterialsPage = () => {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="entry_date">Giriş Tarihi</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="entry_date">Giriş Tarihi</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="entry_date"
                       type="date"
                       data-testid="entry-date-input"
@@ -625,8 +625,8 @@ const RawMaterialsPage = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="quantity">Miktar</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="quantity">Miktar</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="quantity"
                       type="number"
                       step="0.01"
@@ -650,8 +650,8 @@ const RawMaterialsPage = () => {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="price">Birim Fiyat</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="price">Birim Fiyat</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="price"
                       type="number"
                       step="0.01"
@@ -874,8 +874,8 @@ const ProductionPage = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="date">Tarih</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="date">Tarih</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="date"
                       type="date"
                       data-testid="production-date-input"
@@ -897,8 +897,8 @@ const ProductionPage = () => {
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="thickness">Kalınlık (mm)</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="thickness">Kalınlık (mm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="thickness"
                       type="number"
                       step="0.01"
@@ -909,8 +909,8 @@ const ProductionPage = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="width">En (cm)</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="width">En (cm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="width"
                       type="number"
                       step="0.01"
@@ -921,8 +921,8 @@ const ProductionPage = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="length">Metre Sarımı (m)</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="length">Metre Sarımı (m)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="length"
                       type="number"
                       step="0.01"
@@ -934,7 +934,7 @@ const ProductionPage = () => {
                   </div>
                   <div>
                     <Label>Metrekare (otomatik)</Label>
-                    <Input
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       value={calculateSquareMeters()}
                       data-testid="square-meters-display"
                       disabled
@@ -942,8 +942,8 @@ const ProductionPage = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="quantity">Adet</Label>
-                    <Input
+                    <Label className="text-gray-300" htmlFor="quantity">Adet</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
                       id="quantity"
                       type="number"
                       data-testid="production-quantity-input"
@@ -1190,8 +1190,8 @@ const UsersPage = () => {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="user_full_name">Ad Soyad</Label>
-                <Input
+                <Label className="text-gray-300" htmlFor="user_full_name">Ad Soyad</Label>
+                <Input className="bg-gray-900 border-gray-700 text-white"
                   id="user_full_name"
                   data-testid="user-fullname-input"
                   value={formData.full_name}
@@ -1200,8 +1200,8 @@ const UsersPage = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="user_email">E-posta</Label>
-                <Input
+                <Label className="text-gray-300" htmlFor="user_email">E-posta</Label>
+                <Input className="bg-gray-900 border-gray-700 text-white"
                   id="user_email"
                   type="email"
                   data-testid="user-email-input"
@@ -1211,8 +1211,8 @@ const UsersPage = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="user_password">Şifre</Label>
-                <Input
+                <Label className="text-gray-300" htmlFor="user_password">Şifre</Label>
+                <Input className="bg-gray-900 border-gray-700 text-white"
                   id="user_password"
                   type="password"
                   data-testid="user-password-input"
