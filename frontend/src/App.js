@@ -1030,16 +1030,16 @@ const ProductionPage = () => {
                   <TableRow className="border-gray-800 hover:bg-gray-900" key={prod.id} data-testid={`production-row-${prod.id}`}>
                     <TableCell className="text-gray-300">{new Date(prod.date).toLocaleDateString('tr-TR')}</TableCell>
                     <TableCell className="text-gray-300">{prod.machine}</TableCell>
-                    <TableCell className="text-sm">
+                    <TableCell className="text-sm text-gray-300">
                       {prod.thickness_mm}mm x {prod.width_cm}cm x {prod.length_m}m
                     </TableCell>
-                    <TableCell>{prod.square_meters.toFixed(2)} m²</TableCell>
-                    <TableCell>{prod.quantity}</TableCell>
-                    <TableCell>{prod.masura_model}</TableCell>
+                    <TableCell className="text-gray-300">{prod.square_meters.toFixed(2)} m²</TableCell>
+                    <TableCell className="text-gray-300">{prod.quantity}</TableCell>
+                    <TableCell className="text-gray-300">{prod.masura_model}</TableCell>
                     {user?.role === 'admin' && (
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => openEditDialog(prod)} data-testid={`edit-production-${prod.id}`}>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => openEditDialog(prod)} data-testid={`edit-production-${prod.id}`}>
                             Düzenle
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => setDeleteId(prod.id)} data-testid={`delete-production-${prod.id}`}>
