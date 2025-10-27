@@ -43,38 +43,27 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Stok = ({ user, setUser }) => {
-  const [stocks, setStocks] = useState([]);
-  const [materials, setMaterials] = useState([]);
+  const [productions, setProductions] = useState([]);
+  const [cuttings, setCuttings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deletingStockId, setDeletingStockId] = useState(null);
-  const [editingStock, setEditingStock] = useState(null);
-  const [formData, setFormData] = useState({
-    tarih: new Date().toISOString().split('T')[0],
-    tip: 'kesilmemis',
-    model_adi: '',
-    kalinlik: '',
-    en: '',
-    boy: '',
-    renk: 'Renksiz',
-    adet: '',
-  });
-
   const token = localStorage.getItem('token');
-  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
-    fetchStocks();
-    fetchMaterials();
+    fetchData();
   }, []);
 
-  const fetchStocks = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${API}/stok`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setStocks(response.data);
+      const [productionsRes, cuttingsRes] = await Promise.all([
+        axios.get(`${API}/uretim`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        axios.get(`${API}/ebatlama`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      setProductions(productionsRes.data);
+      setCuttings(cuttingsRes.data);
     } catch (error) {
       toast.error('Veriler yüklenirken hata oluştu');
     } finally {
@@ -82,114 +71,52 @@ const Stok = ({ user, setUser }) => {
     }
   };
 
-  const fetchMaterials = async () => {
-    try {
-      const response = await axios.get(`${API}/hammadde`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMaterials(response.data);
-    } catch (error) {
-      console.error('Hammaddeler yüklenirken hata:', error);
-    }
-  };
-
-  const calculateMetrekare = () => {
-    const en = parseFloat(formData.en) || 0;
-    const boy = parseFloat(formData.boy) || 0;
-    if (formData.tip === 'kesilmemis') {
-      // boy in meters
-      return ((en / 100) * boy).toFixed(2);
-    } else {
-      // boy in cm
-      return ((en / 100) * (boy / 100)).toFixed(4);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const payload = {
-        tarih: formData.tarih,
-        tip: formData.tip,
-        model_adi: formData.tip === 'kesilmemis' ? formData.model_adi : null,
-        kalinlik: parseFloat(formData.kalinlik),
-        en: parseFloat(formData.en),
-        boy: parseFloat(formData.boy),
-        renk: formData.tip === 'kesilmemis' ? formData.renk : null,
-        adet: parseInt(formData.adet),
-      };
-
-      if (editingStock) {
-        await axios.put(`${API}/stok/${editingStock.id}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        toast.success('Stok kaydı güncellendi');
+  // Üretimden kesilmemiş stokları grupla
+  const getKesilmemisStocks = () => {
+    const stockMap = {};
+    productions.forEach((prod) => {
+      const key = `${prod.kalinlik}-${prod.en}-${prod.boy}-${prod.renk}`;
+      if (stockMap[key]) {
+        stockMap[key].adet += prod.adet;
       } else {
-        await axios.post(`${API}/stok`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        toast.success('Stok kaydı eklendi');
+        stockMap[key] = {
+          kalinlik: prod.kalinlik,
+          en: prod.en,
+          boy: prod.boy,
+          metrekare: prod.metrekare,
+          renk: prod.renk,
+          adet: prod.adet,
+        };
       }
-
-      setDialogOpen(false);
-      resetForm();
-      fetchStocks();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'İşlem başarısız');
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API}/stok/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success('Stok kaydı silindi');
-      fetchStocks();
-      setDeleteDialogOpen(false);
-      setDeletingStockId(null);
-    } catch (error) {
-      toast.error('Silme işlemi başarısız');
-    }
-  };
-
-  const confirmDelete = (id) => {
-    setDeletingStockId(id);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleEdit = (stock) => {
-    setEditingStock(stock);
-    setFormData({
-      tarih: stock.tarih,
-      tip: stock.tip,
-      model_adi: stock.model_adi || '',
-      kalinlik: stock.kalinlik.toString(),
-      en: stock.en.toString(),
-      boy: stock.boy.toString(),
-      renk: stock.renk || 'Renksiz',
-      adet: stock.adet.toString(),
     });
-    setDialogOpen(true);
+    return Object.values(stockMap);
   };
 
-  const resetForm = () => {
-    setFormData({
-      tarih: new Date().toISOString().split('T')[0],
-      tip: 'kesilmemis',
-      model_adi: '',
-      kalinlik: '',
-      en: '',
-      boy: '',
-      renk: 'Renksiz',
-      adet: '',
+  // Ebatlamadan kesilmiş stokları grupla
+  const getKesilmisStocks = () => {
+    const stockMap = {};
+    cuttings.forEach((cut) => {
+      const key = `${cut.ebat_kalinlik}-${cut.ebat_en}-${cut.ebat_boy}`;
+      if (stockMap[key]) {
+        stockMap[key].adet += cut.istenen_adet;
+      } else {
+        // Ana üretimden renk bilgisini al
+        const anaProd = productions.find(p => p.id === cut.production_id);
+        stockMap[key] = {
+          kalinlik: cut.ebat_kalinlik,
+          en: cut.ebat_en,
+          boy: cut.ebat_boy,
+          metrekare: cut.ebat_metrekare,
+          renk: anaProd?.renk || 'Renksiz',
+          adet: cut.istenen_adet,
+        };
+      }
     });
-    setEditingStock(null);
+    return Object.values(stockMap);
   };
 
-  const kesilmemisStocks = stocks.filter(s => s.tip === 'kesilmemis');
-  const kesilmisStocks = stocks.filter(s => s.tip === 'kesilmis');
+  const kesilmemisStocks = getKesilmemisStocks();
+  const kesilmisStocks = getKesilmisStocks();
 
   return (
     <MainLayout user={user} setUser={setUser}>
