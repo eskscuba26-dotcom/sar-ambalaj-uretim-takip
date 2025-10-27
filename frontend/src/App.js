@@ -6,6 +6,7 @@ import Hammadde from './pages/Hammadde';
 import UserManagement from './pages/UserManagement';
 import Kurlar from './pages/Kurlar';
 import Uretim from './pages/Uretim';
+import Ebatlama from './pages/Ebatlama';
 import '@/App.css';
 
 function App() {
