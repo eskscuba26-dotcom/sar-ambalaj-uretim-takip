@@ -50,6 +50,7 @@ const Hammadde = ({ user, setUser }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingMaterialId, setDeletingMaterialId] = useState(null);
   const [editingMaterial, setEditingMaterial] = useState(null);
+  const [exchangeRates, setExchangeRates] = useState({ usd: 1, eur: 1 });
   const [formData, setFormData] = useState({
     tarih: new Date().toISOString().split('T')[0],
     malzeme: '',
