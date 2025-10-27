@@ -162,6 +162,103 @@ async def init_admin():
     await db.users.insert_one(doc)
     return {"message": "Admin kullanıcı oluşturuldu. Username: admin, Password: admin123"}
 
+# User Management endpoints (Admin only)
+class UserCreate(BaseModel):
+    username: str
+    password: str
+    role: str
+
+class UserUpdateAdmin(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+    role: Optional[str] = None
+
+@api_router.get("/users", response_model=List[UserResponse])
+async def get_users(current_user: User = Depends(require_admin)):
+    users = await db.users.find({}, {"_id": 0, "password_hash": 0}).to_list(1000)
+    return [UserResponse(**u) for u in users]
+
+@api_router.post("/users", response_model=UserResponse)
+async def create_user(
+    user_data: UserCreate,
+    current_user: User = Depends(require_admin)
+):
+    # Check if username already exists
+    existing = await db.users.find_one({"username": user_data.username})
+    if existing:
+        raise HTTPException(status_code=400, detail="Bu kullanıcı adı zaten kullanılıyor")
+    
+    if user_data.role not in ["admin", "viewer"]:
+        raise HTTPException(status_code=400, detail="Geçersiz rol")
+    
+    new_user = User(
+        username=user_data.username,
+        password_hash=get_password_hash(user_data.password),
+        role=user_data.role
+    )
+    doc = new_user.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.users.insert_one(doc)
+    
+    return UserResponse(
+        id=new_user.id,
+        username=new_user.username,
+        role=new_user.role
+    )
+
+@api_router.put("/users/{user_id}", response_model=UserResponse)
+async def update_user(
+    user_id: str,
+    user_update: UserUpdateAdmin,
+    current_user: User = Depends(require_admin)
+):
+    existing = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    
+    update_data = {}
+    if user_update.username:
+        # Check if new username is taken
+        username_taken = await db.users.find_one({
+            "username": user_update.username,
+            "id": {"$ne": user_id}
+        })
+        if username_taken:
+            raise HTTPException(status_code=400, detail="Bu kullanıcı adı zaten kullanılıyor")
+        update_data["username"] = user_update.username
+    
+    if user_update.password:
+        update_data["password_hash"] = get_password_hash(user_update.password)
+    
+    if user_update.role:
+        if user_update.role not in ["admin", "viewer"]:
+            raise HTTPException(status_code=400, detail="Geçersiz rol")
+        update_data["role"] = user_update.role
+    
+    if update_data:
+        await db.users.update_one({"id": user_id}, {"$set": update_data})
+    
+    updated = await db.users.find_one({"id": user_id}, {"_id": 0})
+    return UserResponse(
+        id=updated["id"],
+        username=updated["username"],
+        role=updated["role"]
+    )
+
+@api_router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    current_user: User = Depends(require_admin)
+):
+    # Prevent deleting yourself
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Kendi hesabınızı silemezsiniz")
+    
+    result = await db.users.delete_one({"id": user_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    return {"message": "Kullanıcı silindi"}
+
 # Raw Material endpoints
 @api_router.get("/hammadde", response_model=List[RawMaterial])
 async def get_raw_materials(current_user: User = Depends(get_current_user)):
