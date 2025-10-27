@@ -160,6 +160,10 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Admin access required")
     return current_user
 
+@api_router.get("/")
+async def root():
+    return {"message": "Fabrika Yönetim API"}
+
 # ============ AUTH ENDPOINTS ============
 
 @api_router.post("/auth/register", response_model=User)
