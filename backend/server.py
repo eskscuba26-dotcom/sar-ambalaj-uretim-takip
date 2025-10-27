@@ -618,6 +618,7 @@ async def update_stock_from_cutting(cut_product: CutProduct, is_delete: bool = F
                 length_m=cut_product.target_length_cm / 100,  # cm'den m'ye
                 square_meters=cut_product.target_square_meters,
                 color=cut_product.color,
+                is_cut=True,  # Kesilmiş ürün
                 quantity=cut_product.total_pieces
             )
             await db.stock.insert_one(new_stock.model_dump())
