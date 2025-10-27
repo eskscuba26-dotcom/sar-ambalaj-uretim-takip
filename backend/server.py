@@ -181,6 +181,43 @@ class CuttingUpdate(BaseModel):
     ebat_boy: Optional[float] = None
     istenen_adet: Optional[int] = None
 
+# Stock Model
+class Stock(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    tarih: str
+    tip: str  # "kesilmis" or "kesilmemis"
+    model_adi: Optional[str] = None  # Kesilmemiş için
+    kalinlik: float  # mm
+    en: float  # cm
+    boy: float  # m (kesilmemiş) veya cm (kesilmiş)
+    metrekare: float  # otomatik
+    renk: Optional[str] = None  # Kesilmemiş için
+    adet: int
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class StockCreate(BaseModel):
+    tarih: str
+    tip: str
+    model_adi: Optional[str] = None
+    kalinlik: float
+    en: float
+    boy: float
+    renk: Optional[str] = None
+    adet: int
+
+class StockUpdate(BaseModel):
+    tarih: Optional[str] = None
+    tip: Optional[str] = None
+    model_adi: Optional[str] = None
+    kalinlik: Optional[float] = None
+    en: Optional[float] = None
+    boy: Optional[float] = None
+    renk: Optional[str] = None
+    adet: Optional[int] = None
+
 # Helper functions
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
