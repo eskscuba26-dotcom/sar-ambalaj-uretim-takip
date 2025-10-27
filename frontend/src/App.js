@@ -1800,6 +1800,18 @@ const ShipmentPage = () => {
                     </Select>
                   </div>
                   <div>
+                    <Label className="text-gray-300">Ürün Tipi</Label>
+                    <Select value={formData.is_cut ? "cut" : "normal"} onValueChange={(v) => setFormData({ ...formData, is_cut: v === "cut" })}>
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="shipment-cut-select">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-gray-700">
+                        <SelectItem className="text-white" value="normal">Normal</SelectItem>
+                        <SelectItem className="text-white" value="cut">Kesilmiş</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
                     <Label className="text-gray-300" htmlFor="vehicle">Araç Plakası</Label>
                     <Input className="bg-gray-900 border-gray-700 text-white"
                       id="vehicle"
