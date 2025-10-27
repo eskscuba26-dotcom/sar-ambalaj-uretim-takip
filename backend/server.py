@@ -491,6 +491,8 @@ async def recalculate_stock():
                 'width_cm': prod['width_cm'],
                 'length_m': prod['length_m'],
                 'square_meters': prod['square_meters'],
+                'color': prod.get('color'),
+                'is_cut': False,  # Üretim ürünleri kesilmemiş
                 'quantity': prod['quantity']
             }
     
