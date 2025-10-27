@@ -747,7 +747,7 @@ const RawMaterialsPage = () => {
                     {user?.role === 'admin' && (
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white" onClick={() => openEditDialog(material)} data-testid={`edit-material-${material.id}`}>
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => openEditDialog(material)} data-testid={`edit-material-${material.id}`}>
                             Düzenle
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => setDeleteId(material.id)} data-testid={`delete-material-${material.id}`}>
