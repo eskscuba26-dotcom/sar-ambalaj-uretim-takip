@@ -124,6 +124,7 @@ class Stock(BaseModel):
     length_m: float
     square_meters: float
     color: Optional[str] = None
+    is_cut: bool = False  # Kesilmiş ürün mü?
     quantity: int
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
@@ -136,6 +137,7 @@ class Shipment(BaseModel):
     length_m: float
     square_meters: float
     color: Optional[str] = None
+    is_cut: bool = False  # Kesilmiş ürün mü?
     quantity: int
     invoice_number: Optional[str] = None  # İrsaliye numarası (opsiyonel - eski kayıtlar için)
     customer_name: str
@@ -152,6 +154,7 @@ class ShipmentCreate(BaseModel):
     length_m: float
     quantity: int
     color: Optional[str] = None
+    is_cut: bool = False  # Kesilmiş ürün mü?
     invoice_number: str  # İrsaliye numarası (yeni kayıtlar için zorunlu)
     customer_name: str
     vehicle_plate: str
