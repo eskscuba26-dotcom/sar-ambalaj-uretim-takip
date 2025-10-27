@@ -547,6 +547,118 @@ async def delete_production(
         raise HTTPException(status_code=404, detail="Üretim kaydı bulunamadı")
     return {"message": "Üretim kaydı silindi"}
 
+# Cutting/Sizing endpoints
+@api_router.get("/ebatlama", response_model=List[Cutting])
+async def get_cuttings(current_user: User = Depends(get_current_user)):
+    cuttings = await db.cuttings.find({}, {"_id": 0}).to_list(1000)
+    for cut in cuttings:
+        if isinstance(cut.get('created_at'), str):
+            cut['created_at'] = datetime.fromisoformat(cut['created_at'])
+        if isinstance(cut.get('updated_at'), str):
+            cut['updated_at'] = datetime.fromisoformat(cut['updated_at'])
+    return cuttings
+
+@api_router.post("/ebatlama", response_model=Cutting)
+async def create_cutting(
+    cutting: CuttingCreate,
+    current_user: User = Depends(require_admin)
+):
+    # Get production details
+    production = await db.productions.find_one({"id": cutting.production_id}, {"_id": 0})
+    if not production:
+        raise HTTPException(status_code=404, detail="Üretim kaydı bulunamadı")
+    
+    # Ana ürün metrekaresi
+    ana_metrekare = production['metrekare']
+    
+    # Ebatlanan ürün metrekaresi (cm -> m çevirme)
+    ebat_metrekare = (cutting.ebat_en / 100) * (cutting.ebat_boy / 100)
+    
+    # Kaç adet çıkar
+    cikan_adet = int(ana_metrekare / ebat_metrekare)
+    
+    # Production name için bilgi hazırla
+    prod_name = f"{production['makine']} - {production['kalinlik']}mm x {production['en']}cm x {production['boy']}m"
+    
+    cutting_obj = Cutting(
+        tarih=cutting.tarih,
+        production_id=cutting.production_id,
+        production_name=prod_name,
+        ana_kalinlik=production['kalinlik'],
+        ana_en=production['en'],
+        ana_boy=production['boy'],
+        ana_metrekare=ana_metrekare,
+        ebat_kalinlik=cutting.ebat_kalinlik,
+        ebat_en=cutting.ebat_en,
+        ebat_boy=cutting.ebat_boy,
+        ebat_metrekare=ebat_metrekare,
+        cikan_adet=cikan_adet,
+        created_by=current_user.username
+    )
+    
+    doc = cutting_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.cuttings.insert_one(doc)
+    return cutting_obj
+
+@api_router.put("/ebatlama/{cutting_id}", response_model=Cutting)
+async def update_cutting(
+    cutting_id: str,
+    cutting_update: CuttingUpdate,
+    current_user: User = Depends(require_admin)
+):
+    existing = await db.cuttings.find_one({"id": cutting_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Ebatlama kaydı bulunamadı")
+    
+    update_data = cutting_update.model_dump(exclude_unset=True)
+    
+    # If production changed or ebat values changed, recalculate
+    production_id = update_data.get('production_id', existing['production_id'])
+    production = await db.productions.find_one({"id": production_id}, {"_id": 0})
+    if not production:
+        raise HTTPException(status_code=404, detail="Üretim kaydı bulunamadı")
+    
+    ana_metrekare = production['metrekare']
+    ebat_en = update_data.get('ebat_en', existing['ebat_en'])
+    ebat_boy = update_data.get('ebat_boy', existing['ebat_boy'])
+    ebat_metrekare = (ebat_en / 100) * (ebat_boy / 100)
+    cikan_adet = int(ana_metrekare / ebat_metrekare)
+    
+    prod_name = f"{production['makine']} - {production['kalinlik']}mm x {production['en']}cm x {production['boy']}m"
+    
+    update_data.update({
+        'production_name': prod_name,
+        'ana_kalinlik': production['kalinlik'],
+        'ana_en': production['en'],
+        'ana_boy': production['boy'],
+        'ana_metrekare': ana_metrekare,
+        'ebat_metrekare': ebat_metrekare,
+        'cikan_adet': cikan_adet,
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    })
+    
+    await db.cuttings.update_one({"id": cutting_id}, {"$set": update_data})
+    
+    updated = await db.cuttings.find_one({"id": cutting_id}, {"_id": 0})
+    if isinstance(updated.get('created_at'), str):
+        updated['created_at'] = datetime.fromisoformat(updated['created_at'])
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return Cutting(**updated)
+
+@api_router.delete("/ebatlama/{cutting_id}")
+async def delete_cutting(
+    cutting_id: str,
+    current_user: User = Depends(require_admin)
+):
+    result = await db.cuttings.delete_one({"id": cutting_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Ebatlama kaydı bulunamadı")
+    return {"message": "Ebatlama kaydı silindi"}
+
 # Include router
 app.include_router(api_router)
 
