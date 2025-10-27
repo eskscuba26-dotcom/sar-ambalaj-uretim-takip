@@ -430,6 +430,7 @@ const Ebatlama = ({ user, setUser }) => {
                   <TableHead className="text-zinc-300">Ana Ürün</TableHead>
                   <TableHead className="text-zinc-300">Ebat</TableHead>
                   <TableHead className="text-zinc-300">Ebat m²</TableHead>
+                  <TableHead className="text-zinc-300">Renk</TableHead>
                   <TableHead className="text-zinc-300">İstenen Adet</TableHead>
                   <TableHead className="text-zinc-300">Tek Ana Üründen</TableHead>
                   <TableHead className="text-zinc-300">Tüketilen Ana Ürün</TableHead>
@@ -437,47 +438,62 @@ const Ebatlama = ({ user, setUser }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cuttings.map((cutting) => (
-                  <TableRow key={cutting.id} className="border-zinc-800 hover:bg-zinc-800/30" data-testid={`cutting-row-${cutting.id}`}>
-                    <TableCell className="text-white">
-                      {new Date(cutting.tarih).toLocaleDateString('tr-TR')}
-                    </TableCell>
-                    <TableCell className="text-blue-400 font-semibold text-sm">
-                      {cutting.production_name}
-                    </TableCell>
-                    <TableCell className="text-zinc-400 text-sm">
-                      {cutting.ebat_kalinlik}mm x {cutting.ebat_en}cm x {cutting.ebat_boy}cm
-                    </TableCell>
-                    <TableCell className="text-purple-400 font-semibold">{cutting.ebat_metrekare.toFixed(4)} m²</TableCell>
-                    <TableCell className="text-white font-bold">{cutting.istenen_adet} adet</TableCell>
-                    <TableCell className="text-green-500 font-semibold">{cutting.tek_parça_cikan_adet} adet</TableCell>
-                    <TableCell className="text-orange-500 font-bold text-lg">{cutting.tuketilen_ana_urun.toFixed(2)} adet</TableCell>
-                    {isAdmin && (
-                      <TableCell className="text-right">
-                        <div className="flex justify-end space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleEdit(cutting)}
-                            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-                            data-testid={`edit-button-${cutting.id}`}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => confirmDelete(cutting.id)}
-                            className="border-red-900/50 text-red-400 hover:bg-red-900/20"
-                            data-testid={`delete-button-${cutting.id}`}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                {cuttings.map((cutting) => {
+                  // Ana üretimden renk bilgisini al
+                  const anaProd = productions.find(p => p.id === cutting.production_id);
+                  const renk = anaProd?.renk || 'Renksiz';
+                  
+                  return (
+                    <TableRow key={cutting.id} className="border-zinc-800 hover:bg-zinc-800/30" data-testid={`cutting-row-${cutting.id}`}>
+                      <TableCell className="text-white">
+                        {new Date(cutting.tarih).toLocaleDateString('tr-TR')}
                       </TableCell>
-                    )}
-                  </TableRow>
-                ))}
+                      <TableCell className="text-blue-400 font-semibold text-sm">
+                        {cutting.production_name}
+                      </TableCell>
+                      <TableCell className="text-zinc-400 text-sm">
+                        {cutting.ebat_kalinlik}mm x {cutting.ebat_en}cm x {cutting.ebat_boy}cm
+                      </TableCell>
+                      <TableCell className="text-purple-400 font-semibold">{cutting.ebat_metrekare.toFixed(4)} m²</TableCell>
+                      <TableCell className="text-white">
+                        <span className={`px-2 py-1 rounded text-xs ${
+                          renk === 'Renksiz' 
+                            ? 'bg-zinc-700 text-zinc-300' 
+                            : 'bg-blue-500/20 text-blue-400'
+                        }`}>
+                          {renk}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-white font-bold">{cutting.istenen_adet} adet</TableCell>
+                      <TableCell className="text-green-500 font-semibold">{cutting.tek_parça_cikan_adet} adet</TableCell>
+                      <TableCell className="text-orange-500 font-bold text-lg">{cutting.tuketilen_ana_urun.toFixed(2)} adet</TableCell>
+                      {isAdmin && (
+                        <TableCell className="text-right">
+                          <div className="flex justify-end space-x-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleEdit(cutting)}
+                              className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                              data-testid={`edit-button-${cutting.id}`}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => confirmDelete(cutting.id)}
+                              className="border-red-900/50 text-red-400 hover:bg-red-900/20"
+                              data-testid={`delete-button-${cutting.id}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           )}
