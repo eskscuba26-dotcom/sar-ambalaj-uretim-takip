@@ -286,7 +286,7 @@ async def reset_password_temp(username: str, new_password: str):
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
     
     # Yeni şifreyi hashle ve güncelle
-    hashed = hash_password(new_password)
+    hashed = get_password_hash(new_password)
     await db.users.update_one(
         {"username": username},
         {"$set": {"password_hash": hashed}}
