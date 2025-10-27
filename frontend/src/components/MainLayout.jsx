@@ -22,6 +22,7 @@ const MainLayout = ({ user, setUser, children }) => {
     { path: '/kurlar', icon: DollarSign, label: 'Döviz Kurları', show: true },
     { path: '/uretim', icon: Factory, label: 'Üretim', show: true },
     { path: '/ebatlama', icon: Scissors, label: 'Ebatlama', show: true },
+    { path: '/stok', icon: Archive, label: 'Stok', show: true },
     { path: '/kullanicilar', icon: Users, label: 'Kullanıcılar', show: isAdmin },
   ];
 
