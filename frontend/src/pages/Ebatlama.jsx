@@ -129,6 +129,7 @@ const Ebatlama = ({ user, setUser }) => {
         ebat_kalinlik: parseFloat(formData.ebat_kalinlik),
         ebat_en: parseFloat(formData.ebat_en),
         ebat_boy: parseFloat(formData.ebat_boy),
+        istenen_adet: parseInt(formData.istenen_adet),
       };
 
       if (editingCutting) {
