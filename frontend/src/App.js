@@ -1196,6 +1196,358 @@ const StockPage = () => {
   );
 };
 
+
+// Cut Products Page
+const CutProductsPage = () => {
+  const { user } = useAuth();
+  const [cutProducts, setCutProducts] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [colorOptions, setColorOptions] = useState([]);
+  const [formData, setFormData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    source_thickness_mm: '',
+    source_width_cm: '',
+    source_length_m: '',
+    target_thickness_mm: '',
+    target_width_cm: '',
+    target_length_cm: '',
+    rolls_used: '',
+    color: 'none',
+  });
+
+  useEffect(() => {
+    fetchCutProducts();
+    fetchColorOptions();
+  }, []);
+
+  const fetchColorOptions = async () => {
+    try {
+      const response = await axios.get(`${API}/raw-materials/colors`);
+      setColorOptions(response.data);
+    } catch (error) {
+      console.error('Renk seçenekleri yüklenemedi');
+    }
+  };
+
+  const fetchCutProducts = async () => {
+    try {
+      const response = await axios.get(`${API}/cut-products`);
+      setCutProducts(response.data);
+    } catch (error) {
+      toast.error('Kesim kayıtları yüklenemedi');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        ...formData,
+        source_thickness_mm: parseFloat(formData.source_thickness_mm),
+        source_width_cm: parseFloat(formData.source_width_cm),
+        source_length_m: parseFloat(formData.source_length_m),
+        target_thickness_mm: parseFloat(formData.target_thickness_mm),
+        target_width_cm: parseFloat(formData.target_width_cm),
+        target_length_cm: parseFloat(formData.target_length_cm),
+        rolls_used: parseInt(formData.rolls_used),
+        color: formData.color === 'none' ? null : formData.color,
+      };
+
+      await axios.post(`${API}/cut-products`, data);
+      toast.success('Kesim kaydı eklendi');
+      setDialogOpen(false);
+      resetForm();
+      fetchCutProducts();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'İşlem başarısız');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${API}/cut-products/${deleteId}`);
+      toast.success('Kesim kaydı silindi');
+      setDeleteId(null);
+      fetchCutProducts();
+    } catch (error) {
+      toast.error('Silme işlemi başarısız');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      date: new Date().toISOString().split('T')[0],
+      source_thickness_mm: '',
+      source_width_cm: '',
+      source_length_m: '',
+      target_thickness_mm: '',
+      target_width_cm: '',
+      target_length_cm: '',
+      rolls_used: '',
+      color: 'none',
+    });
+  };
+
+  const calculateSourceSqm = () => {
+    const width = parseFloat(formData.source_width_cm);
+    const length = parseFloat(formData.source_length_m);
+    if (width && length) {
+      return ((width / 100) * length).toFixed(2);
+    }
+    return '0.00';
+  };
+
+  const calculateTargetSqm = () => {
+    const width = parseFloat(formData.target_width_cm);
+    const length = parseFloat(formData.target_length_cm);
+    if (width && length) {
+      return ((width / 100) * (length / 100)).toFixed(4);
+    }
+    return '0.0000';
+  };
+
+  const calculatePiecesPerRoll = () => {
+    const sourceSqm = parseFloat(calculateSourceSqm());
+    const targetSqm = parseFloat(calculateTargetSqm());
+    if (sourceSqm && targetSqm && targetSqm > 0) {
+      return Math.floor(sourceSqm / targetSqm);
+    }
+    return 0;
+  };
+
+  const calculateTotalPieces = () => {
+    const piecesPerRoll = calculatePiecesPerRoll();
+    const rolls = parseInt(formData.rolls_used) || 0;
+    return piecesPerRoll * rolls;
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-white" data-testid="cut-products-title">Kesilmiş Ürün</h1>
+        {user?.role === 'admin' && (
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-cut-product-button">Yeni Kesim</Button>
+            </DialogTrigger>
+            <DialogContent className="bg-gray-950 border-gray-800 max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-white">Yeni Kesim Kaydı</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <Label className="text-gray-300" htmlFor="cut_date">Tarih</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="cut_date"
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="col-span-2">
+                    <h3 className="text-lg font-semibold text-white mb-2">Ana Malzeme</h3>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-gray-300">Kalınlık (mm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.source_thickness_mm}
+                      onChange={(e) => setFormData({ ...formData, source_thickness_mm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">En (cm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.source_width_cm}
+                      onChange={(e) => setFormData({ ...formData, source_width_cm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Uzunluk (m)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.source_length_m}
+                      onChange={(e) => setFormData({ ...formData, source_length_m: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Metrekare (otomatik)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      value={calculateSourceSqm() + ' m²'}
+                      disabled
+                    />
+                  </div>
+                  
+                  <div className="col-span-2">
+                    <h3 className="text-lg font-semibold text-white mb-2 mt-2">İstenilen Ebat</h3>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-gray-300">Kalınlık (mm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.target_thickness_mm}
+                      onChange={(e) => setFormData({ ...formData, target_thickness_mm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">En (cm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.target_width_cm}
+                      onChange={(e) => setFormData({ ...formData, target_width_cm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Uzunluk (cm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      type="number"
+                      step="0.01"
+                      value={formData.target_length_cm}
+                      onChange={(e) => setFormData({ ...formData, target_length_cm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Metrekare (otomatik)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      value={calculateTargetSqm() + ' m²'}
+                      disabled
+                    />
+                  </div>
+                  
+                  <div className="col-span-2 bg-gray-900 p-4 rounded-lg border border-gray-800">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <Label className="text-gray-400 text-sm">Bir Bobinden</Label>
+                        <div className="text-2xl font-bold text-white">{calculatePiecesPerRoll()} adet</div>
+                      </div>
+                      <div>
+                        <Label className="text-gray-300">Kullanılan Bobin</Label>
+                        <Input className="bg-gray-800 border-gray-700 text-white font-bold"
+                          type="number"
+                          value={formData.rolls_used}
+                          onChange={(e) => setFormData({ ...formData, rolls_used: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-gray-400 text-sm">Toplam Adet</Label>
+                        <div className="text-2xl font-bold text-green-400">{calculateTotalPieces()} adet</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="col-span-2">
+                    <Label className="text-gray-300">Renk (Opsiyonel)</Label>
+                    <Select value={formData.color || "none"} onValueChange={(v) => setFormData({ ...formData, color: v === "none" ? "" : v })}>
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white">
+                        <SelectValue placeholder="Renk seçin" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-gray-700">
+                        <SelectItem className="text-white" value="none">Renksiz</SelectItem>
+                        {colorOptions.map(color => (
+                          <SelectItem className="text-white" key={color} value={color}>{color}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700">Kaydet</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
+
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
+        <div className="p-6">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-800 hover:bg-gray-900">
+                  <TableHead className="text-gray-400">Tarih</TableHead>
+                  <TableHead className="text-gray-400">Ana Malzeme</TableHead>
+                  <TableHead className="text-gray-400">Kesilmiş Ebat</TableHead>
+                  <TableHead className="text-gray-400">Renk</TableHead>
+                  <TableHead className="text-gray-400">Adet/Bobin</TableHead>
+                  <TableHead className="text-gray-400">Kullanılan Bobin</TableHead>
+                  <TableHead className="text-gray-400">Toplam Adet</TableHead>
+                  {user?.role === 'admin' && <TableHead className="text-gray-400">İşlemler</TableHead>}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {cutProducts.map((cut) => (
+                  <TableRow className="border-gray-800 hover:bg-gray-900" key={cut.id} data-testid={`cut-product-row-${cut.id}`}>
+                    <TableCell className="text-gray-300">{new Date(cut.date).toLocaleDateString('tr-TR')}</TableCell>
+                    <TableCell className="text-sm text-gray-300">
+                      {cut.source_thickness_mm}mm x {cut.source_width_cm}cm x {cut.source_length_m}m
+                    </TableCell>
+                    <TableCell className="text-sm text-gray-300">
+                      {cut.target_thickness_mm}mm x {cut.target_width_cm}cm x {cut.target_length_cm}cm
+                    </TableCell>
+                    <TableCell className="text-gray-300">{cut.color || '-'}</TableCell>
+                    <TableCell className="text-gray-300 font-medium">{cut.pieces_per_roll}</TableCell>
+                    <TableCell className="text-gray-300">{cut.rolls_used}</TableCell>
+                    <TableCell className="text-white font-bold text-lg">{cut.total_pieces}</TableCell>
+                    {user?.role === 'admin' && (
+                      <TableCell>
+                        <Button size="sm" variant="destructive" onClick={() => setDeleteId(cut.id)} data-testid={`delete-cut-${cut.id}`}>
+                          Sil
+                        </Button>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+                {cutProducts.length === 0 && (
+                  <TableRow className="border-gray-800">
+                    <TableCell colSpan={user?.role === 'admin' ? 8 : 7} className="text-center text-gray-400">
+                      Henüz kesim kaydı eklenmemiş
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+
+      <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent className="bg-gray-950 border-gray-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Bu kesim kaydı silinecek ve stok işlemleri geri alınacaktır.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>İptal</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Sil</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
+
 // Shipment Page
 const ShipmentPage = () => {
   const { user } = useAuth();
