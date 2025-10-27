@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Hammadde from './pages/Hammadde';
 import UserManagement from './pages/UserManagement';
 import Kurlar from './pages/Kurlar';
+import Uretim from './pages/Uretim';
 import '@/App.css';
 
 function App() {
