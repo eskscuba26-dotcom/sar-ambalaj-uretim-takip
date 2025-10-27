@@ -1667,6 +1667,7 @@ const ShipmentPage = () => {
       length_m: shipment.length_m.toString(),
       quantity: shipment.quantity.toString(),
       color: shipment.color || 'none',
+      is_cut: shipment.is_cut || false,
       invoice_number: shipment.invoice_number,
       customer_name: shipment.customer_name,
       vehicle_plate: shipment.vehicle_plate,
