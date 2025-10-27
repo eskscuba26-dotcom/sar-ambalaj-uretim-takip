@@ -578,11 +578,14 @@ async def create_cutting(
     # Ebatlanan ürün metrekaresi (cm -> m çevirme)
     ebat_metrekare = (cutting.ebat_en / 100) * (cutting.ebat_boy / 100)
     
-    # Kaç adet çıkar
-    cikan_adet = int(ana_metrekare / ebat_metrekare)
+    # Tek ana üründen kaç adet çıkar
+    tek_parça_cikan_adet = int(ana_metrekare / ebat_metrekare)
+    
+    # Ana üründen kaç adet tüketilecek
+    tuketilen_ana_urun = cutting.istenen_adet / tek_parça_cikan_adet
     
     # Production name için bilgi hazırla
-    prod_name = f"{production['makine']} - {production['kalinlik']}mm x {production['en']}cm x {production['boy']}m"
+    prod_name = f"{production['kalinlik']}mm x {production['en']}cm x {production['boy']}m = {ana_metrekare:.2f}m²"
     
     cutting_obj = Cutting(
         tarih=cutting.tarih,
@@ -596,7 +599,9 @@ async def create_cutting(
         ebat_en=cutting.ebat_en,
         ebat_boy=cutting.ebat_boy,
         ebat_metrekare=ebat_metrekare,
-        cikan_adet=cikan_adet,
+        tek_parça_cikan_adet=tek_parça_cikan_adet,
+        istenen_adet=cutting.istenen_adet,
+        tuketilen_ana_urun=tuketilen_ana_urun,
         created_by=current_user.username
     )
     
