@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOut, Package } from 'lucide-react';
+import { LogOut, Package, Users } from 'lucide-react';
 
 const Dashboard = ({ user, setUser }) => {
   const navigate = useNavigate();
