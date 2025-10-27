@@ -513,7 +513,11 @@ async def update_stock_from_shipment(shipment: Shipment, is_delete: bool = False
     is_delete=False: decrease stock (shipment created)
     is_delete=True: increase stock (shipment deleted or before update)
     """
-    model_name = f"{shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m"
+    # Format model name to match stock format (without decimals if whole number)
+    thickness = int(shipment.thickness_mm) if shipment.thickness_mm == int(shipment.thickness_mm) else shipment.thickness_mm
+    width = int(shipment.width_cm) if shipment.width_cm == int(shipment.width_cm) else shipment.width_cm
+    length = int(shipment.length_m) if shipment.length_m == int(shipment.length_m) else shipment.length_m
+    model_name = f"{thickness}mm x {width}cm x {length}m"
     
     existing = await db.stock.find_one({"model_name": model_name})
     
