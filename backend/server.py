@@ -502,6 +502,137 @@ async def get_stock(current_user: User = Depends(get_current_user)):
     stocks = await db.stock.find({}, {"_id": 0}).to_list(1000)
     return [Stock(**s) for s in stocks]
 
+# ============ CUT PRODUCTS ============
+
+@api_router.get("/cut-products", response_model=List[CutProduct])
+async def get_cut_products(current_user: User = Depends(get_current_user)):
+    products = await db.cut_products.find({}, {"_id": 0}).to_list(1000)
+    return [CutProduct(**p) for p in products]
+
+@api_router.post("/cut-products", response_model=CutProduct)
+async def create_cut_product(cut_create: CutProductCreate, admin: User = Depends(get_admin_user)):
+    # Ana malzeme metrekare hesapla
+    source_sqm = (cut_create.source_width_cm / 100) * cut_create.source_length_m
+    
+    # İstenilen ebat metrekare hesapla (cm cinsinden)
+    target_sqm = (cut_create.target_width_cm / 100) * (cut_create.target_length_cm / 100)
+    
+    # Bir bobinden kaç adet çıkar
+    pieces_per_roll = int(source_sqm / target_sqm)
+    
+    # Toplam adet
+    total_pieces = pieces_per_roll * cut_create.rolls_used
+    
+    cut_dict = cut_create.model_dump()
+    cut_product = CutProduct(
+        **cut_dict,
+        source_square_meters=source_sqm,
+        target_square_meters=target_sqm,
+        pieces_per_roll=pieces_per_roll,
+        total_pieces=total_pieces,
+        created_by=admin.email
+    )
+    doc = cut_product.model_dump()
+    
+    await db.cut_products.insert_one(doc)
+    
+    # Stok işlemleri
+    await update_stock_from_cutting(cut_product, is_delete=False)
+    
+    return cut_product
+
+@api_router.delete("/cut-products/{cut_id}")
+async def delete_cut_product(cut_id: str, admin: User = Depends(get_admin_user)):
+    cut_doc = await db.cut_products.find_one({"id": cut_id})
+    if not cut_doc:
+        raise HTTPException(status_code=404, detail="Kesim kaydı bulunamadı")
+    
+    cut_product = CutProduct(**cut_doc)
+    
+    result = await db.cut_products.delete_one({"id": cut_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Kesim kaydı bulunamadı")
+    
+    # Stok işlemlerini geri al
+    await update_stock_from_cutting(cut_product, is_delete=True)
+    
+    return {"message": "Kesim kaydı silindi"}
+
+async def update_stock_from_cutting(cut_product: CutProduct, is_delete: bool = False):
+    """Kesim işlemi için stok güncelle
+    is_delete=False: Ana malzeme stoktan düş, kesilmiş ürün stoğa ekle
+    is_delete=True: İşlemi geri al
+    """
+    # Ana malzeme model adı
+    source_thickness = int(cut_product.source_thickness_mm) if cut_product.source_thickness_mm == int(cut_product.source_thickness_mm) else cut_product.source_thickness_mm
+    source_width = int(cut_product.source_width_cm) if cut_product.source_width_cm == int(cut_product.source_width_cm) else cut_product.source_width_cm
+    source_length = int(cut_product.source_length_m) if cut_product.source_length_m == int(cut_product.source_length_m) else cut_product.source_length_m
+    source_model = f"{source_thickness}mm x {source_width}cm x {source_length}m"
+    if cut_product.color:
+        source_model += f" - {cut_product.color}"
+    
+    # Kesilmiş ürün model adı
+    target_thickness = int(cut_product.target_thickness_mm) if cut_product.target_thickness_mm == int(cut_product.target_thickness_mm) else cut_product.target_thickness_mm
+    target_width = int(cut_product.target_width_cm) if cut_product.target_width_cm == int(cut_product.target_width_cm) else cut_product.target_width_cm
+    target_length = int(cut_product.target_length_cm) if cut_product.target_length_cm == int(cut_product.target_length_cm) else cut_product.target_length_cm
+    target_model = f"{target_thickness}mm x {target_width}cm x {target_length}cm"
+    if cut_product.color:
+        target_model += f" - {cut_product.color}"
+    
+    if not is_delete:
+        # 1. Ana malzeme stoktan düş
+        source_stock = await db.stock.find_one({"model_name": source_model})
+        if not source_stock:
+            raise HTTPException(status_code=400, detail=f"Ana malzeme stokta bulunamadı: {source_model}")
+        
+        if source_stock['quantity'] < cut_product.rolls_used:
+            raise HTTPException(status_code=400, detail=f"Yetersiz stok! Mevcut: {source_stock['quantity']}, İstenen: {cut_product.rolls_used}")
+        
+        await db.stock.update_one(
+            {"model_name": source_model},
+            {"$set": {
+                "quantity": source_stock['quantity'] - cut_product.rolls_used,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # 2. Kesilmiş ürün stoğa ekle
+        target_stock = await db.stock.find_one({"model_name": target_model})
+        if target_stock:
+            await db.stock.update_one(
+                {"model_name": target_model},
+                {"$set": {
+                    "quantity": target_stock['quantity'] + cut_product.total_pieces,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+        else:
+            new_stock = Stock(
+                model_name=target_model,
+                thickness_mm=cut_product.target_thickness_mm,
+                width_cm=cut_product.target_width_cm,
+                length_m=cut_product.target_length_cm / 100,  # cm'den m'ye
+                square_meters=cut_product.target_square_meters,
+                color=cut_product.color,
+                quantity=cut_product.total_pieces
+            )
+            await db.stock.insert_one(new_stock.model_dump())
+    else:
+        # Geri al: Ana malzeme stoğa ekle, kesilmiş ürün stoktan düş
+        source_stock = await db.stock.find_one({"model_name": source_model})
+        if source_stock:
+            await db.stock.update_one(
+                {"model_name": source_model},
+                {"$inc": {"quantity": cut_product.rolls_used}}
+            )
+        
+        target_stock = await db.stock.find_one({"model_name": target_model})
+        if target_stock:
+            await db.stock.update_one(
+                {"model_name": target_model},
+                {"$inc": {"quantity": -cut_product.total_pieces}}
+            )
+
 # ============ SHIPMENT ============
 
 @api_router.get("/shipments", response_model=List[Shipment])
