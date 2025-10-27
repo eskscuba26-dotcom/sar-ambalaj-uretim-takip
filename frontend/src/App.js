@@ -322,10 +322,14 @@ const DashboardPage = () => {
         axios.get(`${API}/stock`),
       ]);
 
+      const normalStock = stock.data.filter(s => !s.is_cut).reduce((sum, s) => sum + s.quantity, 0);
+      const cutStock = stock.data.filter(s => s.is_cut).reduce((sum, s) => sum + s.quantity, 0);
+
       setStats({
         totalMaterials: materials.data.length,
         totalProduction: production.data.reduce((sum, p) => sum + p.quantity, 0),
-        totalStock: stock.data.reduce((sum, s) => sum + s.quantity, 0),
+        normalStock: normalStock,
+        cutStock: cutStock,
       });
     } catch (error) {
       console.error('Stats fetch error:', error);
