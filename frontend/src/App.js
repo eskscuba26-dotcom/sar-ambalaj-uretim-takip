@@ -432,7 +432,7 @@ const ExchangeRatesPage = () => {
                 <div>
                   <Label className="text-gray-300" className="text-gray-300">Döviz</Label>
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger data-testid="currency-select" className="bg-gray-900 border-gray-700 text-white">
+                    <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="currency-select" className="bg-gray-900 border-gray-700 text-white">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-900 border-gray-700">
@@ -599,10 +599,10 @@ const RawMaterialsPage = () => {
                   <div>
                     <Label>Hammadde Adı</Label>
                     <Select value={formData.name} onValueChange={(v) => setFormData({ ...formData, name: v })}>
-                      <SelectTrigger data-testid="material-name-select">
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="material-name-select">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-900 border-gray-700">
                         <SelectItem value="PETKİM">PETKİM</SelectItem>
                         <SelectItem value="ESTOL">ESTOL</SelectItem>
                         <SelectItem value="TALK">TALK</SelectItem>
@@ -639,10 +639,10 @@ const RawMaterialsPage = () => {
                   <div>
                     <Label>Birim</Label>
                     <Select value={formData.unit} onValueChange={(v) => setFormData({ ...formData, unit: v })}>
-                      <SelectTrigger data-testid="unit-select">
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="unit-select">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-900 border-gray-700">
                         <SelectItem value="kg">Kilogram (kg)</SelectItem>
                         <SelectItem value="adet">Adet</SelectItem>
                         <SelectItem value="litre">Litre</SelectItem>
@@ -664,10 +664,10 @@ const RawMaterialsPage = () => {
                   <div>
                     <Label>Para Birimi</Label>
                     <Select value={formData.currency} onValueChange={(v) => setFormData({ ...formData, currency: v })}>
-                      <SelectTrigger data-testid="currency-select">
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="currency-select">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-900 border-gray-700">
                         <SelectItem value="TL">TL</SelectItem>
                         <SelectItem value="USD">USD</SelectItem>
                         <SelectItem value="EUR">EUR</SelectItem>
@@ -887,10 +887,10 @@ const ProductionPage = () => {
                   <div>
                     <Label>Makine</Label>
                     <Select value={formData.machine} onValueChange={(v) => setFormData({ ...formData, machine: v })}>
-                      <SelectTrigger data-testid="machine-select">
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="machine-select">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-900 border-gray-700">
                         <SelectItem value="Makine 1">Makine 1</SelectItem>
                         <SelectItem value="Makine 2">Makine 2</SelectItem>
                       </SelectContent>
@@ -955,10 +955,10 @@ const ProductionPage = () => {
                   <div>
                     <Label>Masura Modeli</Label>
                     <Select value={formData.masura_model} onValueChange={(v) => setFormData({ ...formData, masura_model: v })}>
-                      <SelectTrigger data-testid="masura-model-select">
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="masura-model-select">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-900 border-gray-700">
                         <SelectItem value="100">100</SelectItem>
                         <SelectItem value="120">120</SelectItem>
                         <SelectItem value="150">150</SelectItem>
@@ -1224,10 +1224,10 @@ const UsersPage = () => {
               <div>
                 <Label>Rol</Label>
                 <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
-                  <SelectTrigger data-testid="user-role-select">
+                  <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="user-role-select">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-gray-900 border-gray-700">
                     <SelectItem value="admin">Admin</SelectItem>
                     <SelectItem value="viewer">Görüntüleyici</SelectItem>
                   </SelectContent>
