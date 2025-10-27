@@ -670,8 +670,8 @@ const RawMaterialsPage = () => {
         )}
       </div>
 
-      <Card>
-        <CardContent className="pt-6">
+      <div className="bg-white rounded-lg border shadow-sm">
+        <div className="p-6">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -720,8 +720,8 @@ const RawMaterialsPage = () => {
               </TableBody>
             </Table>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
