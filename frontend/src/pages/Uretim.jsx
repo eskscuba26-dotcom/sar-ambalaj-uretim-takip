@@ -173,7 +173,7 @@ const Uretim = ({ user, setUser }) => {
       en: '',
       boy: '',
       adet: '',
-      masura_tipi: '',
+      masura_tipi: 'Masura 100',
       renk: 'Renksiz',
     });
     setEditingProduction(null);
