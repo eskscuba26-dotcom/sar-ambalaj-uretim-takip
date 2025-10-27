@@ -1864,6 +1864,7 @@ const ShipmentPage = () => {
                   <TableHead className="text-gray-400">İrsaliye No</TableHead>
                   <TableHead className="text-gray-400">Model</TableHead>
                   <TableHead className="text-gray-400">Renk</TableHead>
+                  <TableHead className="text-gray-400">Kesilmiş</TableHead>
                   <TableHead className="text-gray-400">Metrekare</TableHead>
                   <TableHead className="text-gray-400">Adet</TableHead>
                   <TableHead className="text-gray-400">Alıcı Firma</TableHead>
@@ -1882,6 +1883,13 @@ const ShipmentPage = () => {
                       {shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m
                     </TableCell>
                     <TableCell className="text-gray-300">{shipment.color || '-'}</TableCell>
+                    <TableCell className="text-gray-300">
+                      {shipment.is_cut ? (
+                        <span className="px-2 py-1 bg-orange-600 text-white rounded text-xs font-medium">Kesilmiş</span>
+                      ) : (
+                        <span className="px-2 py-1 bg-green-700 text-white rounded text-xs font-medium">Normal</span>
+                      )}
+                    </TableCell>
                     <TableCell className="text-gray-300">{shipment.square_meters.toFixed(2)} m²</TableCell>
                     <TableCell className="text-gray-300">{shipment.quantity}</TableCell>
                     <TableCell className="text-gray-300">{shipment.customer_name}</TableCell>
@@ -1904,7 +1912,7 @@ const ShipmentPage = () => {
                 ))}
                 {shipments.length === 0 && (
                   <TableRow className="border-gray-800">
-                    <TableCell colSpan={user?.role === 'admin' ? 11 : 10} className="text-center text-gray-400">
+                    <TableCell colSpan={user?.role === 'admin' ? 12 : 11} className="text-center text-gray-400">
                       Henüz sevkiyat kaydı eklenmemiş
                     </TableCell>
                   </TableRow>
