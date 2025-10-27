@@ -1162,6 +1162,322 @@ const StockPage = () => {
   );
 };
 
+// Shipment Page
+const ShipmentPage = () => {
+  const { user } = useAuth();
+  const [shipments, setShipments] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingShipment, setEditingShipment] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [formData, setFormData] = useState({
+    date: new Date().toISOString().split('T')[0],
+    thickness_mm: '',
+    width_cm: '',
+    length_m: '',
+    quantity: '',
+    customer_name: '',
+    vehicle_plate: '',
+    driver_name: '',
+    departure_time: '',
+  });
+
+  useEffect(() => {
+    fetchShipments();
+  }, []);
+
+  const fetchShipments = async () => {
+    try {
+      const response = await axios.get(`${API}/shipments`);
+      setShipments(response.data);
+    } catch (error) {
+      toast.error('Sevkiyat kayıtları yüklenemedi');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        ...formData,
+        thickness_mm: parseFloat(formData.thickness_mm),
+        width_cm: parseFloat(formData.width_cm),
+        length_m: parseFloat(formData.length_m),
+        quantity: parseInt(formData.quantity),
+      };
+
+      if (editingShipment) {
+        await axios.put(`${API}/shipments/${editingShipment.id}`, data);
+        toast.success('Sevkiyat kaydı güncellendi');
+      } else {
+        await axios.post(`${API}/shipments`, data);
+        toast.success('Sevkiyat kaydı eklendi');
+      }
+      setDialogOpen(false);
+      resetForm();
+      fetchShipments();
+    } catch (error) {
+      toast.error('İşlem başarısız');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${API}/shipments/${deleteId}`);
+      toast.success('Sevkiyat kaydı silindi');
+      setDeleteId(null);
+      fetchShipments();
+    } catch (error) {
+      toast.error('Silme işlemi başarısız');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      date: new Date().toISOString().split('T')[0],
+      thickness_mm: '',
+      width_cm: '',
+      length_m: '',
+      quantity: '',
+      customer_name: '',
+      vehicle_plate: '',
+      driver_name: '',
+      departure_time: '',
+    });
+    setEditingShipment(null);
+  };
+
+  const openEditDialog = (shipment) => {
+    setEditingShipment(shipment);
+    setFormData({
+      date: shipment.date,
+      thickness_mm: shipment.thickness_mm.toString(),
+      width_cm: shipment.width_cm.toString(),
+      length_m: shipment.length_m.toString(),
+      quantity: shipment.quantity.toString(),
+      customer_name: shipment.customer_name,
+      vehicle_plate: shipment.vehicle_plate,
+      driver_name: shipment.driver_name,
+      departure_time: shipment.departure_time,
+    });
+    setDialogOpen(true);
+  };
+
+  const calculateSquareMeters = () => {
+    const width = parseFloat(formData.width_cm);
+    const length = parseFloat(formData.length_m);
+    if (width && length) {
+      return ((width / 100) * length).toFixed(2);
+    }
+    return '0.00';
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-white" data-testid="shipment-title">Sevkiyat</h1>
+        {user?.role === 'admin' && (
+          <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-shipment-button">Yeni Sevkiyat</Button>
+            </DialogTrigger>
+            <DialogContent className="bg-gray-950 border-gray-800 max-w-3xl">
+              <DialogHeader>
+                <DialogTitle className="text-white">{editingShipment ? 'Sevkiyat Düzenle' : 'Yeni Sevkiyat Ekle'}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label className="text-gray-300" htmlFor="shipment_date">Tarih</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="shipment_date"
+                      type="date"
+                      data-testid="shipment-date-input"
+                      value={formData.date}
+                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="customer">Alıcı Firma</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="customer"
+                      data-testid="customer-input"
+                      value={formData.customer_name}
+                      onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="thickness">Kalınlık (mm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="thickness"
+                      type="number"
+                      step="0.01"
+                      data-testid="shipment-thickness-input"
+                      value={formData.thickness_mm}
+                      onChange={(e) => setFormData({ ...formData, thickness_mm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="width">En (cm)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="width"
+                      type="number"
+                      step="0.01"
+                      data-testid="shipment-width-input"
+                      value={formData.width_cm}
+                      onChange={(e) => setFormData({ ...formData, width_cm: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="length">Uzunluk (m)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="length"
+                      type="number"
+                      step="0.01"
+                      data-testid="shipment-length-input"
+                      value={formData.length_m}
+                      onChange={(e) => setFormData({ ...formData, length_m: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Metrekare (otomatik)</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      value={calculateSquareMeters()}
+                      data-testid="shipment-square-meters-display"
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="shipment_quantity">Adet</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="shipment_quantity"
+                      type="number"
+                      data-testid="shipment-quantity-input"
+                      value={formData.quantity}
+                      onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="vehicle">Araç Plakası</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="vehicle"
+                      data-testid="vehicle-input"
+                      value={formData.vehicle_plate}
+                      onChange={(e) => setFormData({ ...formData, vehicle_plate: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="driver">Şoför</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="driver"
+                      data-testid="driver-input"
+                      value={formData.driver_name}
+                      onChange={(e) => setFormData({ ...formData, driver_name: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300" htmlFor="departure_time">Çıkış Saati</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="departure_time"
+                      type="time"
+                      data-testid="departure-time-input"
+                      value={formData.departure_time}
+                      onChange={(e) => setFormData({ ...formData, departure_time: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-shipment-button">Kaydet</Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
+
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
+        <div className="p-6">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-800 hover:bg-gray-900">
+                  <TableHead className="text-gray-400">Tarih</TableHead>
+                  <TableHead className="text-gray-400">Model</TableHead>
+                  <TableHead className="text-gray-400">Metrekare</TableHead>
+                  <TableHead className="text-gray-400">Adet</TableHead>
+                  <TableHead className="text-gray-400">Alıcı Firma</TableHead>
+                  <TableHead className="text-gray-400">Araç Plakası</TableHead>
+                  <TableHead className="text-gray-400">Şoför</TableHead>
+                  <TableHead className="text-gray-400">Çıkış Saati</TableHead>
+                  {user?.role === 'admin' && <TableHead className="text-gray-400">İşlemler</TableHead>}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {shipments.map((shipment) => (
+                  <TableRow className="border-gray-800 hover:bg-gray-900" key={shipment.id} data-testid={`shipment-row-${shipment.id}`}>
+                    <TableCell className="text-gray-300">{new Date(shipment.date).toLocaleDateString('tr-TR')}</TableCell>
+                    <TableCell className="text-sm text-gray-300">
+                      {shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m
+                    </TableCell>
+                    <TableCell className="text-gray-300">{shipment.square_meters.toFixed(2)} m²</TableCell>
+                    <TableCell className="text-gray-300">{shipment.quantity}</TableCell>
+                    <TableCell className="text-gray-300">{shipment.customer_name}</TableCell>
+                    <TableCell className="text-gray-300">{shipment.vehicle_plate}</TableCell>
+                    <TableCell className="text-gray-300">{shipment.driver_name}</TableCell>
+                    <TableCell className="text-gray-300">{shipment.departure_time}</TableCell>
+                    {user?.role === 'admin' && (
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700" onClick={() => openEditDialog(shipment)} data-testid={`edit-shipment-${shipment.id}`}>
+                            Düzenle
+                          </Button>
+                          <Button size="sm" variant="destructive" onClick={() => setDeleteId(shipment.id)} data-testid={`delete-shipment-${shipment.id}`}>
+                            Sil
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+                {shipments.length === 0 && (
+                  <TableRow className="border-gray-800">
+                    <TableCell colSpan={user?.role === 'admin' ? 9 : 8} className="text-center text-gray-400">
+                      Henüz sevkiyat kaydı eklenmemiş
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+
+      <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent className="bg-gray-950 border-gray-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Bu sevkiyat kaydı silinecektir. Bu işlem geri alınamaz.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="cancel-delete-shipment">İptal</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} data-testid="confirm-delete-shipment">Sil</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
+
 // Users Management Page
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
