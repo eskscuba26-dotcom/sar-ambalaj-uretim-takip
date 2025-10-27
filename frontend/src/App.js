@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Hammadde from './pages/Hammadde';
 import UserManagement from './pages/UserManagement';
+import Kurlar from './pages/Kurlar';
 import '@/App.css';
 
 function App() {
