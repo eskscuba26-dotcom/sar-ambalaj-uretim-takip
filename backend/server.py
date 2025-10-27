@@ -632,10 +632,13 @@ async def update_cutting(
     ana_metrekare = production['metrekare']
     ebat_en = update_data.get('ebat_en', existing['ebat_en'])
     ebat_boy = update_data.get('ebat_boy', existing['ebat_boy'])
-    ebat_metrekare = (ebat_en / 100) * (ebat_boy / 100)
-    cikan_adet = int(ana_metrekare / ebat_metrekare)
+    istenen_adet = update_data.get('istenen_adet', existing['istenen_adet'])
     
-    prod_name = f"{production['makine']} - {production['kalinlik']}mm x {production['en']}cm x {production['boy']}m"
+    ebat_metrekare = (ebat_en / 100) * (ebat_boy / 100)
+    tek_parça_cikan_adet = int(ana_metrekare / ebat_metrekare)
+    tuketilen_ana_urun = istenen_adet / tek_parça_cikan_adet
+    
+    prod_name = f"{production['kalinlik']}mm x {production['en']}cm x {production['boy']}m = {ana_metrekare:.2f}m²"
     
     update_data.update({
         'production_name': prod_name,
@@ -644,7 +647,8 @@ async def update_cutting(
         'ana_boy': production['boy'],
         'ana_metrekare': ana_metrekare,
         'ebat_metrekare': ebat_metrekare,
-        'cikan_adet': cikan_adet,
+        'tek_parça_cikan_adet': tek_parça_cikan_adet,
+        'tuketilen_ana_urun': tuketilen_ana_urun,
         'updated_at': datetime.now(timezone.utc).isoformat()
     })
     
