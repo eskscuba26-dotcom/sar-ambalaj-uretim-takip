@@ -805,11 +805,23 @@ const ProductionPage = () => {
     length_m: '',
     quantity: '',
     masura_model: '100',
+    color: '',
   });
+  const [colorOptions, setColorOptions] = useState([]);
 
   useEffect(() => {
     fetchProductions();
+    fetchColorOptions();
   }, []);
+
+  const fetchColorOptions = async () => {
+    try {
+      const response = await axios.get(`${API}/raw-materials/colors`);
+      setColorOptions(response.data);
+    } catch (error) {
+      console.error('Renk seçenekleri yüklenemedi');
+    }
+  };
 
   const fetchProductions = async () => {
     try {
