@@ -225,7 +225,7 @@ const Layout = ({ children }) => {
           <div className="px-6 py-4 border-b border-gray-800">
             <div className="text-sm text-gray-400">Hoş geldiniz</div>
             <div className="text-white font-medium mt-1">{user?.full_name}</div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-gray-400 mt-1">
               {user?.role === 'admin' ? 'Admin' : 'Görüntüleyici'}
             </div>
           </div>
@@ -338,7 +338,7 @@ const DashboardPage = () => {
         <Card className="bg-gray-950 border-gray-800" data-testid="stat-materials">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Hammadde Kayıtları</CardTitle>
-            <Package className="h-4 w-4 text-gray-500" />
+            <Package className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{stats.totalMaterials}</div>
@@ -348,7 +348,7 @@ const DashboardPage = () => {
         <Card className="bg-gray-950 border-gray-800" data-testid="stat-production">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Toplam Üretim (Adet)</CardTitle>
-            <Factory className="h-4 w-4 text-gray-500" />
+            <Factory className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{stats.totalProduction}</div>
@@ -358,7 +358,7 @@ const DashboardPage = () => {
         <Card className="bg-gray-950 border-gray-800" data-testid="stat-stock">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Stok (Adet)</CardTitle>
-            <Warehouse className="h-4 w-4 text-gray-500" />
+            <Warehouse className="h-4 w-4 text-gray-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{stats.totalStock}</div>
@@ -485,7 +485,7 @@ const ExchangeRatesPage = () => {
               ))}
               {rates.length === 0 && (
                 <TableRow className="border-gray-800">
-                  <TableCell colSpan={4} className="text-center text-gray-500">
+                  <TableCell colSpan={4} className="text-center text-gray-400">
                     Henüz kur girilmemiş
                   </TableCell>
                 </TableRow>
@@ -584,7 +584,7 @@ const RawMaterialsPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900" data-testid="raw-materials-title">Hammadde Yönetimi</h1>
+        <h1 className="text-3xl font-bold text-white" data-testid="raw-materials-title">Hammadde Yönetimi</h1>
         {user?.role === 'admin' && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
@@ -684,7 +684,7 @@ const RawMaterialsPage = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm">
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
         <div className="p-6">
           <div className="overflow-x-auto">
             <Table>
@@ -726,7 +726,7 @@ const RawMaterialsPage = () => {
                 ))}
                 {materials.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={user?.role === 'admin' ? 8 : 7} className="text-center text-gray-500">
+                    <TableCell colSpan={user?.role === 'admin' ? 8 : 7} className="text-center text-gray-400">
                       Henüz hammadde eklenmemiş
                     </TableCell>
                   </TableRow>
@@ -861,7 +861,7 @@ const ProductionPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900" data-testid="production-title">Üretim Takibi</h1>
+        <h1 className="text-3xl font-bold text-white" data-testid="production-title">Üretim Takibi</h1>
         {user?.role === 'admin' && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
@@ -976,7 +976,7 @@ const ProductionPage = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm">
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
         <div className="p-6">
           <div className="overflow-x-auto">
             <Table>
@@ -1018,7 +1018,7 @@ const ProductionPage = () => {
                 ))}
                 {productions.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={user?.role === 'admin' ? 7 : 6} className="text-center text-gray-500">
+                    <TableCell colSpan={user?.role === 'admin' ? 7 : 6} className="text-center text-gray-400">
                       Henüz üretim kaydı eklenmemiş
                     </TableCell>
                   </TableRow>
@@ -1051,7 +1051,7 @@ const ProductionPage = () => {
 const CostCalculationPage = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900" data-testid="cost-title">Maliyet Hesaplama</h1>
+      <h1 className="text-3xl font-bold text-white" data-testid="cost-title">Maliyet Hesaplama</h1>
       
       <Card>
         <CardHeader>
@@ -1084,9 +1084,9 @@ const StockPage = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900" data-testid="stock-title">Stok Durumu</h1>
+      <h1 className="text-3xl font-bold text-white" data-testid="stock-title">Stok Durumu</h1>
       
-      <div className="bg-white rounded-lg border shadow-sm">
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
         <div className="p-6">
           <div className="overflow-x-auto">
             <Table>
@@ -1113,7 +1113,7 @@ const StockPage = () => {
                 ))}
                 {stocks.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-500">
+                    <TableCell colSpan={6} className="text-center text-gray-400">
                       Henüz stok bulunmuyor
                     </TableCell>
                   </TableRow>
@@ -1179,7 +1179,7 @@ const UsersPage = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900" data-testid="users-title">Kullanıcı Yönetimi</h1>
+        <h1 className="text-3xl font-bold text-white" data-testid="users-title">Kullanıcı Yönetimi</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button data-testid="add-user-button">Yeni Kullanıcı</Button>
@@ -1241,7 +1241,7 @@ const UsersPage = () => {
         </Dialog>
       </div>
 
-      <div className="bg-white rounded-lg border shadow-sm">
+      <div className="bg-gray-950 rounded-lg border border-gray-800 shadow-sm">
         <div className="p-6">
           <Table>
             <TableHeader>
@@ -1260,7 +1260,7 @@ const UsersPage = () => {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                      user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-300'
                     }`}>
                       {user.role === 'admin' ? 'Admin' : 'Görüntüleyici'}
                     </span>
