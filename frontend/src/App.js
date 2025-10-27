@@ -1013,6 +1013,20 @@ const ProductionPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div>
+                    <Label className="text-gray-300">Renk (Opsiyonel)</Label>
+                    <Select value={formData.color} onValueChange={(v) => setFormData({ ...formData, color: v })}>
+                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="color-select">
+                        <SelectValue placeholder="Renk seçin (opsiyonel)" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-900 border-gray-700">
+                        <SelectItem className="text-white" value="">Renksiz</SelectItem>
+                        {colorOptions.map(color => (
+                          <SelectItem className="text-white" key={color} value={color}>{color}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 <DialogFooter>
                   <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-production-button">Kaydet</Button>
