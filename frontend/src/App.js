@@ -1018,12 +1018,12 @@ const ProductionPage = () => {
                   </div>
                   <div>
                     <Label className="text-gray-300">Renk (Opsiyonel)</Label>
-                    <Select value={formData.color || ""} onValueChange={(v) => setFormData({ ...formData, color: v })}>
+                    <Select value={formData.color || "none"} onValueChange={(v) => setFormData({ ...formData, color: v === "none" ? "" : v })}>
                       <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="color-select">
                         <SelectValue placeholder="Renk seçin" />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem className="text-white" value="">Renksiz</SelectItem>
+                        <SelectItem className="text-white" value="none">Renksiz</SelectItem>
                         {colorOptions.map(color => (
                           <SelectItem className="text-white" key={color} value={color}>{color}</SelectItem>
                         ))}
