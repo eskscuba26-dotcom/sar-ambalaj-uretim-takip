@@ -386,7 +386,14 @@ async def delete_production(prod_id: str, admin: User = Depends(get_admin_user))
     return {"message": "Production deleted"}
 
 async def update_stock_from_production(production: Production):
-    model_name = f"{production.thickness_mm}mm x {production.width_cm}cm x {production.length_m}m"
+    thickness = int(production.thickness_mm) if production.thickness_mm == int(production.thickness_mm) else production.thickness_mm
+    width = int(production.width_cm) if production.width_cm == int(production.width_cm) else production.width_cm
+    length = int(production.length_m) if production.length_m == int(production.length_m) else production.length_m
+    
+    # Model adı renk ile birlikte
+    model_name = f"{thickness}mm x {width}cm x {length}m"
+    if production.color:
+        model_name += f" - {production.color}"
     
     existing = await db.stock.find_one({"model_name": model_name})
     
@@ -406,6 +413,7 @@ async def update_stock_from_production(production: Production):
             width_cm=production.width_cm,
             length_m=production.length_m,
             square_meters=production.square_meters,
+            color=production.color,
             quantity=production.quantity
         )
         await db.stock.insert_one(stock.model_dump())
