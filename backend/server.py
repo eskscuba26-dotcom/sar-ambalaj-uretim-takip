@@ -257,7 +257,7 @@ async def require_admin(current_user: User = Depends(get_current_user)):
 # Auth endpoints
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_login: UserLogin):
-    user = await db.users.find_one({"username": user_login.username}, {"_id": 0})
+    user = await db.users.find_one({"email": user_login.email}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
     
