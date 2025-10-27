@@ -260,7 +260,7 @@ const Ebatlama = ({ user, setUser }) => {
                       <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
                         {productions.map((prod) => (
                           <SelectItem key={prod.id} value={prod.id}>
-                            {prod.makine} - {prod.kalinlik}mm x {prod.en}cm x {prod.boy}m ({prod.metrekare.toFixed(2)}m²)
+                            {prod.kalinlik}mm x {prod.en}cm x {prod.boy}m = {prod.metrekare.toFixed(2)}m²
                           </SelectItem>
                         ))}
                       </SelectContent>
