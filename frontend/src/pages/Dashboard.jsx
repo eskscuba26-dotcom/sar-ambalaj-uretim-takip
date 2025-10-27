@@ -11,10 +11,11 @@ const Dashboard = ({ user, setUser }) => {
   const [productions, setProductions] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
+  const location = useLocation();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [location.pathname]); // Refresh when navigating to dashboard
 
   const fetchData = async () => {
     try {
