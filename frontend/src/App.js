@@ -1772,7 +1772,7 @@ const ShipmentPage = () => {
                     />
                   </div>
                   <div>
-                    <Label className="text-gray-300" htmlFor="length">Uzunluk (m)</Label>
+                    <Label className="text-gray-300" htmlFor="length">Uzunluk ({formData.is_cut ? 'cm' : 'm'})</Label>
                     <Input className="bg-gray-900 border-gray-700 text-white"
                       id="length"
                       type="number"
@@ -1782,6 +1782,18 @@ const ShipmentPage = () => {
                       onChange={(e) => setFormData({ ...formData, length_m: e.target.value })}
                       required
                     />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="is_cut"
+                        className="w-4 h-4 rounded border-gray-700 bg-gray-900"
+                        checked={formData.is_cut}
+                        onChange={(e) => setFormData({ ...formData, is_cut: e.target.checked })}
+                      />
+                      <Label className="text-gray-300" htmlFor="is_cut">Kesilmiş Ürün</Label>
+                    </div>
                   </div>
                   <div>
                     <Label className="text-gray-300">Metrekare (otomatik)</Label>
