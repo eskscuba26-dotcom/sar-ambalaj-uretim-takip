@@ -280,6 +280,7 @@ const Stok = ({ user, setUser }) => {
                       <TableHead className="text-zinc-300">Tarih</TableHead>
                       <TableHead className="text-zinc-300">Boyut</TableHead>
                       <TableHead className="text-zinc-300">m²</TableHead>
+                      <TableHead className="text-zinc-300">Renk</TableHead>
                       <TableHead className="text-zinc-300">Adet</TableHead>
                       {isAdmin && <TableHead className="text-zinc-300 text-right">İşlemler</TableHead>}
                     </TableRow>
@@ -290,6 +291,15 @@ const Stok = ({ user, setUser }) => {
                         <TableCell className="text-white">{new Date(stock.tarih).toLocaleDateString('tr-TR')}</TableCell>
                         <TableCell className="text-zinc-400 text-sm">{stock.kalinlik}mm x {stock.en}cm x {stock.boy}cm</TableCell>
                         <TableCell className="text-purple-400 font-semibold">{stock.metrekare.toFixed(4)} m²</TableCell>
+                        <TableCell className="text-white">
+                          {stock.renk ? (
+                            <span className={`px-2 py-1 rounded text-xs ${stock.renk === 'Renksiz' ? 'bg-zinc-700 text-zinc-300' : 'bg-blue-500/20 text-blue-400'}`}>
+                              {stock.renk}
+                            </span>
+                          ) : (
+                            <span className="text-zinc-500 text-xs">-</span>
+                          )}
+                        </TableCell>
                         <TableCell className="text-orange-500 font-bold text-lg">{stock.adet} adet</TableCell>
                         {isAdmin && (
                           <TableCell className="text-right">
