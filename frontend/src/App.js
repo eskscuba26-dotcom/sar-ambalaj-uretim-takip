@@ -599,21 +599,53 @@ const RawMaterialsPage = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Hammadde Adı</Label>
-                    <Select value={formData.name} onValueChange={(v) => setFormData({ ...formData, name: v })}>
-                      <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="material-name-select">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem value="PETKİM">PETKİM</SelectItem>
-                        <SelectItem value="ESTOL">ESTOL</SelectItem>
-                        <SelectItem value="TALK">TALK</SelectItem>
-                        <SelectItem value="MASURA 100">MASURA 100</SelectItem>
-                        <SelectItem value="MASURA 120">MASURA 120</SelectItem>
-                        <SelectItem value="MASURA 150">MASURA 150</SelectItem>
-                        <SelectItem value="MASURA 200">MASURA 200</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label className="text-gray-300">Hammadde Adı</Label>
+                    {!showCustomInput ? (
+                      <Select value={formData.name} onValueChange={(v) => {
+                        if (v === 'CUSTOM') {
+                          setShowCustomInput(true);
+                          setFormData({ ...formData, name: '' });
+                        } else {
+                          setFormData({ ...formData, name: v });
+                        }
+                      }}>
+                        <SelectTrigger className="bg-gray-900 border-gray-700 text-white" data-testid="material-name-select">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-900 border-gray-700">
+                          <SelectItem value="PETKİM">PETKİM</SelectItem>
+                          <SelectItem value="ESTOL">ESTOL</SelectItem>
+                          <SelectItem value="TALK">TALK</SelectItem>
+                          <SelectItem value="GAZ">GAZ</SelectItem>
+                          <SelectItem value="MASURA 100">MASURA 100</SelectItem>
+                          <SelectItem value="MASURA 120">MASURA 120</SelectItem>
+                          <SelectItem value="MASURA 150">MASURA 150</SelectItem>
+                          <SelectItem value="MASURA 200">MASURA 200</SelectItem>
+                          <SelectItem value="CUSTOM">+ Yeni Hammadde Ekle</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <div className="space-y-2">
+                        <Input
+                          className="bg-gray-900 border-gray-700 text-white"
+                          placeholder="Yeni hammadde adı"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                        <Button 
+                          type="button" 
+                          size="sm"
+                          variant="outline"
+                          className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                          onClick={() => {
+                            setShowCustomInput(false);
+                            setFormData({ ...formData, name: 'PETKİM' });
+                          }}
+                        >
+                          İptal
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Label className="text-gray-300" htmlFor="entry_date">Giriş Tarihi</Label>
