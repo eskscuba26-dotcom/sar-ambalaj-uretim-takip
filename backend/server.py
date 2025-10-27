@@ -665,6 +665,41 @@ async def create_cutting(
     doc['created_at'] = doc['created_at'].isoformat()
     doc['updated_at'] = doc['updated_at'].isoformat()
     await db.cuttings.insert_one(doc)
+    
+    # Otomatik kesilmiş stok oluştur
+    kesilmis_stock = Stock(
+        tarih=cutting.tarih,
+        tip="kesilmis",
+        model_adi=None,
+        kalinlik=cutting.ebat_kalinlik,
+        en=cutting.ebat_en,
+        boy=cutting.ebat_boy,
+        metrekare=ebat_metrekare,
+        renk=production.get('renk'),
+        adet=cutting.istenen_adet,
+        created_by=current_user.username
+    )
+    stock_doc = kesilmis_stock.model_dump()
+    stock_doc['created_at'] = stock_doc['created_at'].isoformat()
+    stock_doc['updated_at'] = stock_doc['updated_at'].isoformat()
+    await db.stocks.insert_one(stock_doc)
+    
+    # Ana üründen tüketilen miktarı düş
+    # Aynı kalınlık, en, boy'a sahip kesilmemiş stoğu bul
+    ana_stock = await db.stocks.find_one({
+        "tip": "kesilmemis",
+        "kalinlik": production['kalinlik'],
+        "en": production['en'],
+        "boy": production['boy']
+    }, {"_id": 0})
+    
+    if ana_stock and ana_stock['adet'] >= tuketilen_ana_urun:
+        yeni_adet = ana_stock['adet'] - tuketilen_ana_urun
+        await db.stocks.update_one(
+            {"id": ana_stock['id']},
+            {"$set": {"adet": yeni_adet, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
     return cutting_obj
 
 @api_router.put("/ebatlama/{cutting_id}", response_model=Cutting)
