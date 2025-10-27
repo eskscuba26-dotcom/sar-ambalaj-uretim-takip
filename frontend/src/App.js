@@ -1049,6 +1049,7 @@ const ProductionPage = () => {
                   <TableHead className="text-gray-400">Tarih</TableHead>
                   <TableHead className="text-gray-400">Makine</TableHead>
                   <TableHead className="text-gray-400">Model</TableHead>
+                  <TableHead className="text-gray-400">Renk</TableHead>
                   <TableHead className="text-gray-400">Metrekare</TableHead>
                   <TableHead className="text-gray-400">Adet</TableHead>
                   <TableHead className="text-gray-400">Masura</TableHead>
@@ -1063,6 +1064,7 @@ const ProductionPage = () => {
                     <TableCell className="text-sm text-gray-300">
                       {prod.thickness_mm}mm x {prod.width_cm}cm x {prod.length_m}m
                     </TableCell>
+                    <TableCell className="text-gray-300">{prod.color || '-'}</TableCell>
                     <TableCell className="text-gray-300">{prod.square_meters.toFixed(2)} m²</TableCell>
                     <TableCell className="text-gray-300">{prod.quantity}</TableCell>
                     <TableCell className="text-gray-300">{prod.masura_model}</TableCell>
