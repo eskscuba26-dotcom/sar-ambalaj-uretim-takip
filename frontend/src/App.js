@@ -1485,6 +1485,7 @@ const ShipmentPage = () => {
               <TableHeader>
                 <TableRow className="border-gray-800 hover:bg-gray-900">
                   <TableHead className="text-gray-400">Tarih</TableHead>
+                  <TableHead className="text-gray-400">İrsaliye No</TableHead>
                   <TableHead className="text-gray-400">Model</TableHead>
                   <TableHead className="text-gray-400">Renk</TableHead>
                   <TableHead className="text-gray-400">Metrekare</TableHead>
@@ -1500,6 +1501,7 @@ const ShipmentPage = () => {
                 {shipments.map((shipment) => (
                   <TableRow className="border-gray-800 hover:bg-gray-900" key={shipment.id} data-testid={`shipment-row-${shipment.id}`}>
                     <TableCell className="text-gray-300">{new Date(shipment.date).toLocaleDateString('tr-TR')}</TableCell>
+                    <TableCell className="text-gray-300 font-medium">{shipment.invoice_number}</TableCell>
                     <TableCell className="text-sm text-gray-300">
                       {shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m
                     </TableCell>
@@ -1526,7 +1528,7 @@ const ShipmentPage = () => {
                 ))}
                 {shipments.length === 0 && (
                   <TableRow className="border-gray-800">
-                    <TableCell colSpan={user?.role === 'admin' ? 10 : 9} className="text-center text-gray-400">
+                    <TableCell colSpan={user?.role === 'admin' ? 11 : 10} className="text-center text-gray-400">
                       Henüz sevkiyat kaydı eklenmemiş
                     </TableCell>
                   </TableRow>
