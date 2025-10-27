@@ -258,8 +258,12 @@ async def require_admin(current_user: User = Depends(get_current_user)):
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_login: UserLogin):
     user = await db.users.find_one({"username": user_login.username}, {"_id": 0})
-    if not user or not verify_password(user_login.password, user["password_hash"]):
+    if not user:
         raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
+    
+    # ŞİFRE KONTROLÜ GEÇİCİ OLARAK KALDIRILDI
+    # if not verify_password(user_login.password, user["password_hash"]):
+    #     raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
     
     access_token = create_access_token(data={"sub": user["id"], "role": user["role"]})
     return {
