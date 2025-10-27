@@ -443,6 +443,74 @@ async def delete_exchange_rate(
         raise HTTPException(status_code=404, detail="Kur bulunamadı")
     return {"message": "Kur silindi"}
 
+# Production endpoints
+@api_router.get("/uretim", response_model=List[Production])
+async def get_productions(current_user: User = Depends(get_current_user)):
+    productions = await db.productions.find({}, {"_id": 0}).to_list(1000)
+    for prod in productions:
+        if isinstance(prod.get('created_at'), str):
+            prod['created_at'] = datetime.fromisoformat(prod['created_at'])
+        if isinstance(prod.get('updated_at'), str):
+            prod['updated_at'] = datetime.fromisoformat(prod['updated_at'])
+    return productions
+
+@api_router.post("/uretim", response_model=Production)
+async def create_production(
+    production: ProductionCreate,
+    current_user: User = Depends(require_admin)
+):
+    # Calculate metrekare: (en in cm / 100) * boy in meters
+    metrekare = (production.en / 100) * production.boy
+    
+    production_obj = Production(
+        **production.model_dump(),
+        metrekare=metrekare,
+        created_by=current_user.username
+    )
+    doc = production_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.productions.insert_one(doc)
+    return production_obj
+
+@api_router.put("/uretim/{production_id}", response_model=Production)
+async def update_production(
+    production_id: str,
+    production_update: ProductionUpdate,
+    current_user: User = Depends(require_admin)
+):
+    existing = await db.productions.find_one({"id": production_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Üretim kaydı bulunamadı")
+    
+    update_data = production_update.model_dump(exclude_unset=True)
+    
+    # Recalculate metrekare if en or boy changed
+    en = update_data.get('en', existing['en'])
+    boy = update_data.get('boy', existing['boy'])
+    update_data['metrekare'] = (en / 100) * boy
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.productions.update_one({"id": production_id}, {"$set": update_data})
+    
+    updated = await db.productions.find_one({"id": production_id}, {"_id": 0})
+    if isinstance(updated.get('created_at'), str):
+        updated['created_at'] = datetime.fromisoformat(updated['created_at'])
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return Production(**updated)
+
+@api_router.delete("/uretim/{production_id}")
+async def delete_production(
+    production_id: str,
+    current_user: User = Depends(require_admin)
+):
+    result = await db.productions.delete_one({"id": production_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Üretim kaydı bulunamadı")
+    return {"message": "Üretim kaydı silindi"}
+
 # Include router
 app.include_router(api_router)
 
