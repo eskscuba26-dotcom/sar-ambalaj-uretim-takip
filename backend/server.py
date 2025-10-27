@@ -709,6 +709,87 @@ async def delete_cutting(
         raise HTTPException(status_code=404, detail="Ebatlama kaydı bulunamadı")
     return {"message": "Ebatlama kaydı silindi"}
 
+# Stock endpoints
+@api_router.get("/stok", response_model=List[Stock])
+async def get_stocks(current_user: User = Depends(get_current_user)):
+    stocks = await db.stocks.find({}, {"_id": 0}).to_list(1000)
+    for stock in stocks:
+        if isinstance(stock.get('created_at'), str):
+            stock['created_at'] = datetime.fromisoformat(stock['created_at'])
+        if isinstance(stock.get('updated_at'), str):
+            stock['updated_at'] = datetime.fromisoformat(stock['updated_at'])
+    return stocks
+
+@api_router.post("/stok", response_model=Stock)
+async def create_stock(
+    stock: StockCreate,
+    current_user: User = Depends(require_admin)
+):
+    # Calculate metrekare based on tip
+    if stock.tip == "kesilmemis":
+        # boy in meters
+        metrekare = (stock.en / 100) * stock.boy
+    else:  # kesilmis
+        # boy in cm
+        metrekare = (stock.en / 100) * (stock.boy / 100)
+    
+    stock_obj = Stock(
+        **stock.model_dump(),
+        metrekare=metrekare,
+        created_by=current_user.username
+    )
+    
+    doc = stock_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.stocks.insert_one(doc)
+    return stock_obj
+
+@api_router.put("/stok/{stock_id}", response_model=Stock)
+async def update_stock(
+    stock_id: str,
+    stock_update: StockUpdate,
+    current_user: User = Depends(require_admin)
+):
+    existing = await db.stocks.find_one({"id": stock_id}, {"_id": 0})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Stok kaydı bulunamadı")
+    
+    update_data = stock_update.model_dump(exclude_unset=True)
+    
+    # Recalculate metrekare if dimensions changed
+    tip = update_data.get('tip', existing['tip'])
+    en = update_data.get('en', existing['en'])
+    boy = update_data.get('boy', existing['boy'])
+    
+    if tip == "kesilmemis":
+        metrekare = (en / 100) * boy
+    else:
+        metrekare = (en / 100) * (boy / 100)
+    
+    update_data['metrekare'] = metrekare
+    update_data['updated_at'] = datetime.now(timezone.utc).isoformat()
+    
+    await db.stocks.update_one({"id": stock_id}, {"$set": update_data})
+    
+    updated = await db.stocks.find_one({"id": stock_id}, {"_id": 0})
+    if isinstance(updated.get('created_at'), str):
+        updated['created_at'] = datetime.fromisoformat(updated['created_at'])
+    if isinstance(updated.get('updated_at'), str):
+        updated['updated_at'] = datetime.fromisoformat(updated['updated_at'])
+    
+    return Stock(**updated)
+
+@api_router.delete("/stok/{stock_id}")
+async def delete_stock(
+    stock_id: str,
+    current_user: User = Depends(require_admin)
+):
+    result = await db.stocks.delete_one({"id": stock_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Stok kaydı bulunamadı")
+    return {"message": "Stok kaydı silindi"}
+
 # Include router
 app.include_router(api_router)
 
