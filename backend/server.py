@@ -296,6 +296,20 @@ async def update_exchange_rate(rate_update: ExchangeRateUpdate, admin: User = De
 
 # ============ RAW MATERIALS ============
 
+@api_router.get("/raw-materials/colors", response_model=List[str])
+async def get_color_options(current_user: User = Depends(get_current_user)):
+    """Get unique color names from raw materials"""
+    materials = await db.raw_materials.find({}, {"_id": 0, "name": 1}).to_list(1000)
+    # Renk olarak kullanılabilecek hammaddeler (büyük harfle başlayanlar veya spesifik isimler)
+    color_names = []
+    common_colors = ["SARI", "MAVİ", "KIRMIZI", "YEŞİL", "SİYAH", "BEYAZ", "TURUNCU", "MOR", "PEMBE", "KAHVERENGİ", "GRİ"]
+    for m in materials:
+        name = m['name'].upper()
+        if any(color in name for color in common_colors):
+            if m['name'] not in color_names:
+                color_names.append(m['name'])
+    return sorted(color_names)
+
 @api_router.get("/raw-materials", response_model=List[RawMaterial])
 async def get_raw_materials(current_user: User = Depends(get_current_user)):
     materials = await db.raw_materials.find({}, {"_id": 0}).to_list(1000)
