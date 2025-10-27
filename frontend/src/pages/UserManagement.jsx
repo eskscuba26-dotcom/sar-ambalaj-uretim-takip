@@ -377,7 +377,7 @@ const UserManagement = ({ user, setUser }) => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleDelete(usr.id)}
+                          onClick={() => confirmDelete(usr.id)}
                           className="border-red-900/50 text-red-400 hover:bg-red-900/20"
                           disabled={usr.id === user.id}
                           data-testid={`delete-button-${usr.id}`}
