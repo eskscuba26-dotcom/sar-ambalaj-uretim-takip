@@ -588,7 +588,7 @@ const RawMaterialsPage = () => {
         {user?.role === 'admin' && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
-              <Button data-testid="add-raw-material-button">Yeni Hammadde</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-raw-material-button">Yeni Hammadde</Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
@@ -676,7 +676,7 @@ const RawMaterialsPage = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit" data-testid="save-raw-material-button">Kaydet</Button>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-raw-material-button">Kaydet</Button>
                 </DialogFooter>
               </form>
             </DialogContent>
@@ -865,7 +865,7 @@ const ProductionPage = () => {
         {user?.role === 'admin' && (
           <Dialog open={dialogOpen} onOpenChange={(open) => { setDialogOpen(open); if (!open) resetForm(); }}>
             <DialogTrigger asChild>
-              <Button data-testid="add-production-button">Yeni Üretim</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-production-button">Yeni Üretim</Button>
             </DialogTrigger>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
@@ -968,7 +968,7 @@ const ProductionPage = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit" data-testid="save-production-button">Kaydet</Button>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-production-button">Kaydet</Button>
                 </DialogFooter>
               </form>
             </DialogContent>
@@ -1182,7 +1182,7 @@ const UsersPage = () => {
         <h1 className="text-3xl font-bold text-white" data-testid="users-title">Kullanıcı Yönetimi</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button data-testid="add-user-button">Yeni Kullanıcı</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700" data-testid="add-user-button">Yeni Kullanıcı</Button>
           </DialogTrigger>
           <DialogContent className="bg-gray-950 border-gray-800">
             <DialogHeader>
@@ -1234,7 +1234,7 @@ const UsersPage = () => {
                 </Select>
               </div>
               <DialogFooter>
-                <Button type="submit" data-testid="save-user-button">Kaydet</Button>
+                <Button type="submit" className="bg-blue-600 hover:bg-blue-700" data-testid="save-user-button">Kaydet</Button>
               </DialogFooter>
             </form>
           </DialogContent>
