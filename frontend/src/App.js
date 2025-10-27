@@ -7,6 +7,7 @@ import UserManagement from './pages/UserManagement';
 import Kurlar from './pages/Kurlar';
 import Uretim from './pages/Uretim';
 import Ebatlama from './pages/Ebatlama';
+import Stok from './pages/Stok';
 import '@/App.css';
 
 function App() {
