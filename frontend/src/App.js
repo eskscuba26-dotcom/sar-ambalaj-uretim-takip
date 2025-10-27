@@ -62,6 +62,10 @@ function App() {
           path="/ebatlama"
           element={user ? <Ebatlama user={user} setUser={setUser} /> : <Navigate to="/login" />}
         />
+        <Route
+          path="/stok"
+          element={user ? <Stok user={user} setUser={setUser} /> : <Navigate to="/login" />}
+        />
       </Routes>
     </BrowserRouter>
   );
