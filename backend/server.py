@@ -124,6 +124,33 @@ class Stock(BaseModel):
     quantity: int
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+class Shipment(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    date: str
+    thickness_mm: float
+    width_cm: float
+    length_m: float
+    square_meters: float
+    quantity: int
+    customer_name: str
+    vehicle_plate: str
+    driver_name: str
+    departure_time: str
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_by: str
+
+class ShipmentCreate(BaseModel):
+    date: str
+    thickness_mm: float
+    width_cm: float
+    length_m: float
+    quantity: int
+    customer_name: str
+    vehicle_plate: str
+    driver_name: str
+    departure_time: str
+
 # ============ AUTH HELPERS ============
 
 def hash_password(password: str) -> str:
