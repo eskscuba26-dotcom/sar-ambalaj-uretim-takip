@@ -158,7 +158,9 @@ class Cutting(BaseModel):
     ebat_en: float  # cm
     ebat_boy: float  # cm
     ebat_metrekare: float  # m² (tek parça)
-    cikan_adet: int  # Kaç adet çıkar
+    tek_parça_cikan_adet: int  # Tek ana üründen kaç adet çıkar
+    istenen_adet: int  # Kaç adet isteniyor
+    tuketilen_ana_urun: float  # Ana üründen kaç adet tüketilecek
     created_by: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -169,6 +171,7 @@ class CuttingCreate(BaseModel):
     ebat_kalinlik: float
     ebat_en: float
     ebat_boy: float
+    istenen_adet: int
 
 class CuttingUpdate(BaseModel):
     tarih: Optional[str] = None
@@ -176,6 +179,7 @@ class CuttingUpdate(BaseModel):
     ebat_kalinlik: Optional[float] = None
     ebat_en: Optional[float] = None
     ebat_boy: Optional[float] = None
+    istenen_adet: Optional[int] = None
 
 # Helper functions
 def verify_password(plain_password, hashed_password):
