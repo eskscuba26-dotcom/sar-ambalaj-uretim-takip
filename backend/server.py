@@ -440,6 +440,46 @@ async def get_stock(current_user: User = Depends(get_current_user)):
     stocks = await db.stock.find({}, {"_id": 0}).to_list(1000)
     return [Stock(**s) for s in stocks]
 
+# ============ SHIPMENT ============
+
+@api_router.get("/shipments", response_model=List[Shipment])
+async def get_shipments(current_user: User = Depends(get_current_user)):
+    shipments = await db.shipments.find({}, {"_id": 0}).to_list(1000)
+    return [Shipment(**s) for s in shipments]
+
+@api_router.post("/shipments", response_model=Shipment)
+async def create_shipment(shipment_create: ShipmentCreate, admin: User = Depends(get_admin_user)):
+    # Calculate square meters
+    square_meters = (shipment_create.width_cm / 100) * shipment_create.length_m
+    
+    shipment_dict = shipment_create.model_dump()
+    shipment = Shipment(**shipment_dict, square_meters=square_meters, created_by=admin.email)
+    doc = shipment.model_dump()
+    
+    await db.shipments.insert_one(doc)
+    return shipment
+
+@api_router.put("/shipments/{shipment_id}", response_model=Shipment)
+async def update_shipment(shipment_id: str, shipment_create: ShipmentCreate, admin: User = Depends(get_admin_user)):
+    square_meters = (shipment_create.width_cm / 100) * shipment_create.length_m
+    
+    shipment_dict = shipment_create.model_dump()
+    shipment = Shipment(id=shipment_id, **shipment_dict, square_meters=square_meters, created_by=admin.email)
+    doc = shipment.model_dump()
+    
+    result = await db.shipments.update_one({"id": shipment_id}, {"$set": doc})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Shipment not found")
+    
+    return shipment
+
+@api_router.delete("/shipments/{shipment_id}")
+async def delete_shipment(shipment_id: str, admin: User = Depends(get_admin_user)):
+    result = await db.shipments.delete_one({"id": shipment_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Shipment not found")
+    return {"message": "Shipment deleted"}
+
 # ============ INCLUDE ROUTER ============
 
 app.include_router(api_router)
