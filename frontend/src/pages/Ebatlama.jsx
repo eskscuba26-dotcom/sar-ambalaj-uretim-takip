@@ -416,12 +416,11 @@ const Ebatlama = ({ user, setUser }) => {
                 <TableRow className="border-zinc-800 hover:bg-zinc-800/30">
                   <TableHead className="text-zinc-300">Tarih</TableHead>
                   <TableHead className="text-zinc-300">Ana Ürün</TableHead>
-                  <TableHead className="text-zinc-300">Ana m²</TableHead>
-                  <TableHead className="text-zinc-300">Ebat Kalınlık</TableHead>
-                  <TableHead className="text-zinc-300">Ebat En</TableHead>
-                  <TableHead className="text-zinc-300">Ebat Boy</TableHead>
+                  <TableHead className="text-zinc-300">Ebat</TableHead>
                   <TableHead className="text-zinc-300">Ebat m²</TableHead>
-                  <TableHead className="text-zinc-300">Çıkan Adet</TableHead>
+                  <TableHead className="text-zinc-300">İstenen Adet</TableHead>
+                  <TableHead className="text-zinc-300">Tek Ana Üründen</TableHead>
+                  <TableHead className="text-zinc-300">Tüketilen Ana Ürün</TableHead>
                   {isAdmin && <TableHead className="text-zinc-300 text-right">İşlemler</TableHead>}
                 </TableRow>
               </TableHeader>
@@ -431,13 +430,16 @@ const Ebatlama = ({ user, setUser }) => {
                     <TableCell className="text-white">
                       {new Date(cutting.tarih).toLocaleDateString('tr-TR')}
                     </TableCell>
-                    <TableCell className="text-white text-sm">{cutting.production_name}</TableCell>
-                    <TableCell className="text-blue-400 font-semibold">{cutting.ana_metrekare.toFixed(2)} m²</TableCell>
-                    <TableCell className="text-zinc-400">{cutting.ebat_kalinlik} mm</TableCell>
-                    <TableCell className="text-zinc-400">{cutting.ebat_en} cm</TableCell>
-                    <TableCell className="text-zinc-400">{cutting.ebat_boy} cm</TableCell>
+                    <TableCell className="text-blue-400 font-semibold text-sm">
+                      {cutting.production_name}
+                    </TableCell>
+                    <TableCell className="text-zinc-400 text-sm">
+                      {cutting.ebat_kalinlik}mm x {cutting.ebat_en}cm x {cutting.ebat_boy}cm
+                    </TableCell>
                     <TableCell className="text-purple-400 font-semibold">{cutting.ebat_metrekare.toFixed(4)} m²</TableCell>
-                    <TableCell className="text-green-500 font-bold text-lg">{cutting.cikan_adet} adet</TableCell>
+                    <TableCell className="text-white font-bold">{cutting.istenen_adet} adet</TableCell>
+                    <TableCell className="text-green-500 font-semibold">{cutting.tek_parça_cikan_adet} adet</TableCell>
+                    <TableCell className="text-orange-500 font-bold text-lg">{cutting.tuketilen_ana_urun.toFixed(2)} adet</TableCell>
                     {isAdmin && (
                       <TableCell className="text-right">
                         <div className="flex justify-end space-x-2">
