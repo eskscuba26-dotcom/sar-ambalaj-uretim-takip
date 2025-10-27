@@ -878,6 +878,7 @@ const ProductionPage = () => {
       length_m: '',
       quantity: '',
       masura_model: '100',
+      color: '',
     });
     setEditingProduction(null);
   };
@@ -892,6 +893,7 @@ const ProductionPage = () => {
       length_m: production.length_m.toString(),
       quantity: production.quantity.toString(),
       masura_model: production.masura_model,
+      color: production.color || '',
     });
     setDialogOpen(true);
   };
