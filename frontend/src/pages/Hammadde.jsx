@@ -419,7 +419,7 @@ const Hammadde = ({ user, setUser }) => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleDelete(material.id)}
+                            onClick={() => confirmDelete(material.id)}
                             className="border-red-900/50 text-red-400 hover:bg-red-900/20"
                             data-testid={`delete-button-${material.id}`}
                           >
