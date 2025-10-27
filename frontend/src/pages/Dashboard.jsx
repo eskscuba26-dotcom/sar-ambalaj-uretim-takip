@@ -77,7 +77,7 @@ const Dashboard = ({ user, setUser }) => {
                   Hammadde Stokları
                 </h3>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
                 {materialStock.length === 0 ? (
                   <div className="col-span-full bg-zinc-900/50 border border-zinc-800 rounded-xl p-8 text-center text-zinc-400">
                     Henüz hammadde kaydı bulunmamaktadır.
@@ -86,17 +86,17 @@ const Dashboard = ({ user, setUser }) => {
                   materialStock.map((item, index) => (
                     <div
                       key={index}
-                      className="bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-xl p-6 hover:border-green-500/50 transition-all duration-300"
+                      className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 hover:border-green-500/40 hover:bg-zinc-900/70 transition-all duration-200"
                       data-testid={`stock-card-${item.name}`}
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <Boxes className="h-5 w-5 text-green-500" />
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="text-white font-semibold text-sm leading-tight">{item.name}</h4>
+                        <Boxes className="h-4 w-4 text-green-500/70 flex-shrink-0 ml-2" />
                       </div>
-                      <h4 className="text-white font-semibold text-lg mb-2">{item.name}</h4>
-                      <p className="text-3xl font-bold text-green-400">
+                      <p className="text-2xl font-bold text-green-400 mb-0.5">
                         {item.quantity.toLocaleString('tr-TR')}
                       </p>
-                      <p className="text-xs text-zinc-500 mt-1">kg</p>
+                      <p className="text-xs text-zinc-500">kg</p>
                     </div>
                   ))
                 )}
