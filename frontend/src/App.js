@@ -1165,6 +1165,7 @@ const StockPage = () => {
                   <TableHead className="text-gray-400">Uzunluk (m)</TableHead>
                   <TableHead className="text-gray-400">Metrekare (m²)</TableHead>
                   <TableHead className="text-gray-400">Renk</TableHead>
+                  <TableHead className="text-gray-400">Kesilmiş</TableHead>
                   <TableHead className="text-gray-400">Stok Adedi</TableHead>
                 </TableRow>
               </TableHeader>
@@ -1177,12 +1178,19 @@ const StockPage = () => {
                     <TableCell className="text-gray-300">{stock.length_m}</TableCell>
                     <TableCell className="text-gray-300">{stock.square_meters.toFixed(2)}</TableCell>
                     <TableCell className="text-gray-300">{stock.color || '-'}</TableCell>
+                    <TableCell className="text-gray-300">
+                      {stock.is_cut ? (
+                        <span className="px-2 py-1 bg-orange-600 text-white rounded text-xs font-medium">Kesilmiş</span>
+                      ) : (
+                        <span className="px-2 py-1 bg-green-700 text-white rounded text-xs font-medium">Normal</span>
+                      )}
+                    </TableCell>
                     <TableCell className="font-bold text-lg text-white">{stock.quantity}</TableCell>
                   </TableRow>
                 ))}
                 {stocks.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-gray-400">
+                    <TableCell colSpan={8} className="text-center text-gray-400">
                       Henüz stok bulunmuyor
                     </TableCell>
                   </TableRow>
