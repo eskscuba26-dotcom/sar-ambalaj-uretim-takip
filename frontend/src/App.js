@@ -1473,6 +1473,7 @@ const ShipmentPage = () => {
                 <TableRow className="border-gray-800 hover:bg-gray-900">
                   <TableHead className="text-gray-400">Tarih</TableHead>
                   <TableHead className="text-gray-400">Model</TableHead>
+                  <TableHead className="text-gray-400">Renk</TableHead>
                   <TableHead className="text-gray-400">Metrekare</TableHead>
                   <TableHead className="text-gray-400">Adet</TableHead>
                   <TableHead className="text-gray-400">Alıcı Firma</TableHead>
@@ -1489,6 +1490,7 @@ const ShipmentPage = () => {
                     <TableCell className="text-sm text-gray-300">
                       {shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m
                     </TableCell>
+                    <TableCell className="text-gray-300">{shipment.color || '-'}</TableCell>
                     <TableCell className="text-gray-300">{shipment.square_meters.toFixed(2)} m²</TableCell>
                     <TableCell className="text-gray-300">{shipment.quantity}</TableCell>
                     <TableCell className="text-gray-300">{shipment.customer_name}</TableCell>
@@ -1511,7 +1513,7 @@ const ShipmentPage = () => {
                 ))}
                 {shipments.length === 0 && (
                   <TableRow className="border-gray-800">
-                    <TableCell colSpan={user?.role === 'admin' ? 9 : 8} className="text-center text-gray-400">
+                    <TableCell colSpan={user?.role === 'admin' ? 10 : 9} className="text-center text-gray-400">
                       Henüz sevkiyat kaydı eklenmemiş
                     </TableCell>
                   </TableRow>
