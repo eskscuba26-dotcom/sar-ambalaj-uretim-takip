@@ -199,6 +199,7 @@ const Layout = ({ children }) => {
     { path: '/uretim', label: 'Üretim', icon: Factory },
     { path: '/maliyet', label: 'Maliyet', icon: BarChart3 },
     { path: '/stok', label: 'Stok', icon: Warehouse },
+    { path: '/sevkiyat', label: 'Sevkiyat', icon: Package },
     ...(user?.role === 'admin' ? [{ path: '/users', label: 'Kullanıcılar', icon: Users }] : []),
   ];
 
