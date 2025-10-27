@@ -47,6 +47,8 @@ const Hammadde = ({ user, setUser }) => {
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingMaterialId, setDeletingMaterialId] = useState(null);
   const [editingMaterial, setEditingMaterial] = useState(null);
   const [formData, setFormData] = useState({
     tarih: new Date().toISOString().split('T')[0],
