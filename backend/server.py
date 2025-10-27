@@ -137,6 +137,7 @@ class Shipment(BaseModel):
     square_meters: float
     color: Optional[str] = None
     quantity: int
+    invoice_number: str  # İrsaliye numarası
     customer_name: str
     vehicle_plate: str
     driver_name: str
@@ -151,6 +152,7 @@ class ShipmentCreate(BaseModel):
     length_m: float
     quantity: int
     color: Optional[str] = None
+    invoice_number: str  # İrsaliye numarası
     customer_name: str
     vehicle_plate: str
     driver_name: str
