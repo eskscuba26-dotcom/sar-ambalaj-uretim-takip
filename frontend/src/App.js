@@ -461,24 +461,25 @@ const ExchangeRatesPage = () => {
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Güncelleyen</th>
                 </tr>
               </thead>
-            <TableBody>
-              {rates.map((r) => (
-                <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`}>
-                  <TableCell className="font-medium">{r.currency}</TableCell>
-                  <TableCell>{r.rate.toFixed(2)}</TableCell>
-                  <TableCell>{new Date(r.updated_at).toLocaleString('tr-TR')}</TableCell>
-                  <TableCell>{r.updated_by}</TableCell>
-                </TableRow>
-              ))}
-              {rates.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={4} className="text-center text-gray-500">
-                    Henüz kur girilmemiş
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              <tbody className="[&_tr:last-child]:border-0">
+                {rates.map((r) => (
+                  <tr key={r.id} data-testid={`exchange-rate-${r.currency}`} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">{r.currency}</td>
+                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{r.rate.toFixed(2)}</td>
+                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{new Date(r.updated_at).toLocaleString('tr-TR')}</td>
+                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{r.updated_by}</td>
+                  </tr>
+                ))}
+                {rates.length === 0 && (
+                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                    <td colSpan={4} className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-center text-gray-500">
+                      Henüz kur girilmemiş
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
