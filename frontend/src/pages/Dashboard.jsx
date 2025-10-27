@@ -10,6 +10,7 @@ const API = `${BACKEND_URL}/api`;
 const Dashboard = ({ user, setUser }) => {
   const [materials, setMaterials] = useState([]);
   const [productions, setProductions] = useState([]);
+  const [cuttings, setCuttings] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
   const location = useLocation();
