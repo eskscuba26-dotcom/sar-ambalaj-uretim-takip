@@ -75,7 +75,7 @@ class FabrikaAPITester:
         
         # Register first user (should become admin)
         admin_data = {
-            "email": f"admin_{timestamp}@test.com",
+            "email": f"admin_test_{timestamp}@test.com",
             "password": "TestPass123!",
             "full_name": "Test Admin User"
         }
