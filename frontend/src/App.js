@@ -1620,13 +1620,19 @@ const ShipmentPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Kesilmiş ürünse uzunluk cm, değilse m cinsinden
+      const lengthInMeters = formData.is_cut 
+        ? parseFloat(formData.length_m) / 100  // cm'den m'ye
+        : parseFloat(formData.length_m);
+      
       const data = {
         ...formData,
         thickness_mm: parseFloat(formData.thickness_mm),
         width_cm: parseFloat(formData.width_cm),
-        length_m: parseFloat(formData.length_m),
+        length_m: lengthInMeters,
         quantity: parseInt(formData.quantity),
         color: formData.color === 'none' ? null : formData.color,
+        is_cut: formData.is_cut,
       };
 
       if (editingShipment) {
@@ -1640,7 +1646,7 @@ const ShipmentPage = () => {
       resetForm();
       fetchShipments();
     } catch (error) {
-      toast.error('İşlem başarısız');
+      toast.error(error.response?.data?.detail || 'İşlem başarısız');
     }
   };
 
