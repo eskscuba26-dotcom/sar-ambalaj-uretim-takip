@@ -173,6 +173,16 @@ const Hammadde = ({ user, setUser }) => {
     navigate('/login');
   };
 
+  const calculateTotalInTL = (material) => {
+    const total = material.miktar * material.birim_fiyat;
+    if (material.para_birimi === 'USD') {
+      return total * exchangeRates.usd;
+    } else if (material.para_birimi === 'EUR') {
+      return total * exchangeRates.eur;
+    }
+    return total;
+  };
+
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
