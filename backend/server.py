@@ -457,10 +457,24 @@ async def create_shipment(shipment_create: ShipmentCreate, admin: User = Depends
     doc = shipment.model_dump()
     
     await db.shipments.insert_one(doc)
+    
+    # Update stock - decrease quantity
+    await update_stock_from_shipment(shipment, is_delete=False)
+    
     return shipment
 
 @api_router.put("/shipments/{shipment_id}", response_model=Shipment)
 async def update_shipment(shipment_id: str, shipment_create: ShipmentCreate, admin: User = Depends(get_admin_user)):
+    # Get old shipment to restore stock
+    old_shipment = await db.shipments.find_one({"id": shipment_id})
+    if not old_shipment:
+        raise HTTPException(status_code=404, detail="Shipment not found")
+    
+    # Restore old stock
+    old_shipment_obj = Shipment(**old_shipment)
+    await update_stock_from_shipment(old_shipment_obj, is_delete=True)
+    
+    # Calculate new square meters
     square_meters = (shipment_create.width_cm / 100) * shipment_create.length_m
     
     shipment_dict = shipment_create.model_dump()
@@ -471,14 +485,58 @@ async def update_shipment(shipment_id: str, shipment_create: ShipmentCreate, adm
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Shipment not found")
     
+    # Decrease new stock
+    await update_stock_from_shipment(shipment, is_delete=False)
+    
     return shipment
 
 @api_router.delete("/shipments/{shipment_id}")
 async def delete_shipment(shipment_id: str, admin: User = Depends(get_admin_user)):
+    # Get shipment to restore stock
+    shipment_doc = await db.shipments.find_one({"id": shipment_id})
+    if not shipment_doc:
+        raise HTTPException(status_code=404, detail="Shipment not found")
+    
+    shipment = Shipment(**shipment_doc)
+    
     result = await db.shipments.delete_one({"id": shipment_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Shipment not found")
+    
+    # Restore stock
+    await update_stock_from_shipment(shipment, is_delete=True)
+    
     return {"message": "Shipment deleted"}
+
+async def update_stock_from_shipment(shipment: Shipment, is_delete: bool = False):
+    """Update stock when shipment is created/deleted
+    is_delete=False: decrease stock (shipment created)
+    is_delete=True: increase stock (shipment deleted or before update)
+    """
+    model_name = f"{shipment.thickness_mm}mm x {shipment.width_cm}cm x {shipment.length_m}m"
+    
+    existing = await db.stock.find_one({"model_name": model_name})
+    
+    if existing:
+        if is_delete:
+            # Restore stock (add back)
+            new_quantity = existing['quantity'] + shipment.quantity
+        else:
+            # Decrease stock
+            new_quantity = existing['quantity'] - shipment.quantity
+            if new_quantity < 0:
+                raise HTTPException(status_code=400, detail=f"Yetersiz stok! Mevcut: {existing['quantity']}, İstenen: {shipment.quantity}")
+        
+        await db.stock.update_one(
+            {"model_name": model_name},
+            {"$set": {
+                "quantity": new_quantity,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    else:
+        if not is_delete:
+            raise HTTPException(status_code=400, detail=f"Bu model stokta bulunamadı: {model_name}")
 
 # ============ INCLUDE ROUTER ============
 
