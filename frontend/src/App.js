@@ -805,7 +805,7 @@ const ProductionPage = () => {
     length_m: '',
     quantity: '',
     masura_model: '100',
-    color: '',
+    color: 'none',
   });
   const [colorOptions, setColorOptions] = useState([]);
 
