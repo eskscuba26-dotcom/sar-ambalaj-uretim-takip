@@ -110,17 +110,22 @@ const Hammadde = ({ user, setUser }) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Bu kaydı silmek istediğinizden emin misiniz?')) return;
-
     try {
       await axios.delete(`${API}/hammadde/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Hammadde silindi');
       fetchMaterials();
+      setDeleteDialogOpen(false);
+      setDeletingMaterialId(null);
     } catch (error) {
       toast.error('Silme işlemi başarısız');
     }
+  };
+
+  const confirmDelete = (id) => {
+    setDeletingMaterialId(id);
+    setDeleteDialogOpen(true);
   };
 
   const handleEdit = (material) => {
