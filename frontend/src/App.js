@@ -738,10 +738,10 @@ const RawMaterialsPage = () => {
       </div>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-gray-950 border-gray-800">
           <AlertDialogHeader>
-            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-white">Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
               Bu hammadde kaydı silinecektir. Bu işlem geri alınamaz.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -1030,10 +1030,10 @@ const ProductionPage = () => {
       </div>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-gray-950 border-gray-800">
           <AlertDialogHeader>
-            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-white">Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
               Bu üretim kaydı silinecektir. Bu işlem geri alınamaz ve stok miktarları yeniden hesaplanacaktır.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -1279,10 +1279,10 @@ const UsersPage = () => {
       </div>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-gray-950 border-gray-800">
           <AlertDialogHeader>
-            <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-white">Emin misiniz?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
               Bu kullanıcı silinecektir. Bu işlem geri alınamaz.
             </AlertDialogDescription>
           </AlertDialogHeader>
