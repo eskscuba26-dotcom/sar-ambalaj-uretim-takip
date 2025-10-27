@@ -119,17 +119,22 @@ const UserManagement = ({ user, setUser }) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) return;
-
     try {
       await axios.delete(`${API}/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Kullanıcı silindi');
       fetchUsers();
+      setDeleteDialogOpen(false);
+      setDeletingUserId(null);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Silme işlemi başarısız');
     }
+  };
+
+  const confirmDelete = (id) => {
+    setDeletingUserId(id);
+    setDeleteDialogOpen(true);
   };
 
   const handleEdit = (usr) => {
