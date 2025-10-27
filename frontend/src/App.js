@@ -592,7 +592,7 @@ const RawMaterialsPage = () => {
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
-                <DialogTitle>{editingMaterial ? 'Hammadde Düzenle' : 'Yeni Hammadde Ekle'}</DialogTitle>
+                <DialogTitle className="text-white">{editingMaterial ? 'Hammadde Düzenle' : 'Yeni Hammadde Ekle'}</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -869,7 +869,7 @@ const ProductionPage = () => {
             </DialogTrigger>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
-                <DialogTitle>{editingProduction ? 'Üretim Düzenle' : 'Yeni Üretim Ekle'}</DialogTitle>
+                <DialogTitle className="text-white">{editingProduction ? 'Üretim Düzenle' : 'Yeni Üretim Ekle'}</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -1184,9 +1184,9 @@ const UsersPage = () => {
           <DialogTrigger asChild>
             <Button data-testid="add-user-button">Yeni Kullanıcı</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="bg-gray-950 border-gray-800">
             <DialogHeader>
-              <DialogTitle>Yeni Kullanıcı Ekle</DialogTitle>
+              <DialogTitle className="text-white">Yeni Kullanıcı Ekle</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
