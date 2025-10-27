@@ -128,7 +128,7 @@ const Stok = ({ user, setUser }) => {
               Stok Yönetimi
             </h2>
             <p className="text-zinc-400 text-sm mt-1">
-              {stocks.length} stok kaydı bulunuyor (Otomatik Güncelleniyor)
+              Üretim ve Ebatlamadan Otomatik Güncelleniyor
             </p>
           </div>
         </div>
