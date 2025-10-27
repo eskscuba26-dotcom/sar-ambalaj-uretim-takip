@@ -704,16 +704,16 @@ const RawMaterialsPage = () => {
                 {materials.map((material) => (
                   <TableRow className="border-gray-800 hover:bg-gray-900" key={material.id} data-testid={`material-row-${material.id}`}>
                     <TableCell className="font-medium text-white">{material.name}</TableCell>
-                    <TableCell>{new Date(material.entry_date).toLocaleDateString('tr-TR')}</TableCell>
-                    <TableCell>{material.quantity.toFixed(2)}</TableCell>
-                    <TableCell>{material.unit}</TableCell>
-                    <TableCell>{material.price.toFixed(2)}</TableCell>
-                    <TableCell>{material.currency}</TableCell>
+                    <TableCell className="text-gray-300">{new Date(material.entry_date).toLocaleDateString('tr-TR')}</TableCell>
+                    <TableCell className="text-gray-300">{material.quantity.toFixed(2)}</TableCell>
+                    <TableCell className="text-gray-300">{material.unit}</TableCell>
+                    <TableCell className="text-gray-300">{material.price.toFixed(2)}</TableCell>
+                    <TableCell className="text-gray-300">{material.currency}</TableCell>
                     <TableCell className="font-medium text-white">{material.total_value.toFixed(2)} {material.currency}</TableCell>
                     {user?.role === 'admin' && (
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => openEditDialog(material)} data-testid={`edit-material-${material.id}`}>
+                          <Button size="sm" variant="outline" className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white" onClick={() => openEditDialog(material)} data-testid={`edit-material-${material.id}`}>
                             Düzenle
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => setDeleteId(material.id)} data-testid={`delete-material-${material.id}`}>
