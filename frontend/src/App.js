@@ -456,11 +456,11 @@ const ExchangeRatesPage = () => {
               <thead className="[&_tr]:border-b">
                 <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                   <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Döviz</th>
-                <TableHead>Kur (TL)</TableHead>
-                <TableHead>Güncellenme</TableHead>
-                <TableHead>Güncelleyen</TableHead>
-              </TableRow>
-            </TableHeader>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Kur (TL)</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Güncellenme</th>
+                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Güncelleyen</th>
+                </tr>
+              </thead>
             <TableBody>
               {rates.map((r) => (
                 <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`}>
