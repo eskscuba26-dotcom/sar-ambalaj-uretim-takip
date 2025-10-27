@@ -104,6 +104,33 @@ const Login = ({ setUser }) => {
             </Button>
           </form>
 
+          {/* ACİL GİRİŞ BUTONU */}
+          <div className="mt-4">
+            <Button
+              type="button"
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  const response = await axios.post(`${API}/auth/emergency-login?username=admin`);
+                  const { access_token, user } = response.data;
+                  localStorage.setItem('token', access_token);
+                  localStorage.setItem('user', JSON.stringify(user));
+                  setUser(user);
+                  toast.success('Acil giriş başarılı!');
+                  navigate('/');
+                } catch (error) {
+                  toast.error('Acil giriş başarısız');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+              disabled={loading}
+              className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition-all duration-200"
+            >
+              {loading ? 'Giriş yapılıyor...' : '🚨 ACİL GİRİŞ (Şifresiz)'}
+            </Button>
+          </div>
+
           {/* Footer */}
           <div className="mt-6 text-center text-xs text-zinc-500">
             <p>© 2025 SAR Ambalaj - Tüm hakları saklıdır</p>
