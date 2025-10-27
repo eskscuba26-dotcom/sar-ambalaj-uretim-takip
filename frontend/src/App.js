@@ -1571,6 +1571,7 @@ const ShipmentPage = () => {
     length_m: '',
     quantity: '',
     color: 'none',
+    is_cut: false,
     invoice_number: '',
     customer_name: '',
     vehicle_plate: '',
