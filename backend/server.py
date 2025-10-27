@@ -548,6 +548,25 @@ async def create_production(
     doc['created_at'] = doc['created_at'].isoformat()
     doc['updated_at'] = doc['updated_at'].isoformat()
     await db.productions.insert_one(doc)
+    
+    # Otomatik stok oluştur (kesilmemiş)
+    stock = Stock(
+        tarih=production.tarih,
+        tip="kesilmemis",
+        model_adi=f"{production.makine} - {production.masura_tipi}",
+        kalinlik=production.kalinlik,
+        en=production.en,
+        boy=production.boy,
+        metrekare=metrekare,
+        renk=production.renk,
+        adet=production.adet,
+        created_by=current_user.username
+    )
+    stock_doc = stock.model_dump()
+    stock_doc['created_at'] = stock_doc['created_at'].isoformat()
+    stock_doc['updated_at'] = stock_doc['updated_at'].isoformat()
+    await db.stocks.insert_one(stock_doc)
+    
     return production_obj
 
 @api_router.put("/uretim/{production_id}", response_model=Production)
