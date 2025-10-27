@@ -65,7 +65,19 @@ const Hammadde = ({ user, setUser }) => {
 
   useEffect(() => {
     fetchMaterials();
+    fetchExchangeRates();
   }, []);
+
+  const fetchExchangeRates = async () => {
+    try {
+      const response = await axios.get(`${API}/kurlar/latest`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setExchangeRates(response.data);
+    } catch (error) {
+      console.error('Kurlar yüklenirken hata:', error);
+    }
+  };
 
   const fetchMaterials = async () => {
     try {
