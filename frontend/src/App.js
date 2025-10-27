@@ -57,6 +57,10 @@ function App() {
           path="/uretim"
           element={user ? <Uretim user={user} setUser={setUser} /> : <Navigate to="/login" />}
         />
+        <Route
+          path="/ebatlama"
+          element={user ? <Ebatlama user={user} setUser={setUser} /> : <Navigate to="/login" />}
+        />
       </Routes>
     </BrowserRouter>
   );
