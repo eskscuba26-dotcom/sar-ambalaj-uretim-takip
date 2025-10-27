@@ -437,8 +437,8 @@ const ExchangeRatesPage = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-900 border-gray-700">
-                      <SelectItem value="USD">USD</SelectItem>
-                      <SelectItem value="EUR">EUR</SelectItem>
+                      <SelectItem className="text-white" value="USD">USD</SelectItem>
+                      <SelectItem className="text-white" value="EUR">EUR</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -614,15 +614,15 @@ const RawMaterialsPage = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-900 border-gray-700">
-                          <SelectItem value="PETKİM">PETKİM</SelectItem>
-                          <SelectItem value="ESTOL">ESTOL</SelectItem>
-                          <SelectItem value="TALK">TALK</SelectItem>
-                          <SelectItem value="GAZ">GAZ</SelectItem>
-                          <SelectItem value="MASURA 100">MASURA 100</SelectItem>
-                          <SelectItem value="MASURA 120">MASURA 120</SelectItem>
-                          <SelectItem value="MASURA 150">MASURA 150</SelectItem>
-                          <SelectItem value="MASURA 200">MASURA 200</SelectItem>
-                          <SelectItem value="CUSTOM">+ Yeni Hammadde Ekle</SelectItem>
+                          <SelectItem className="text-white" value="PETKİM">PETKİM</SelectItem>
+                          <SelectItem className="text-white" value="ESTOL">ESTOL</SelectItem>
+                          <SelectItem className="text-white" value="TALK">TALK</SelectItem>
+                          <SelectItem className="text-white" value="GAZ">GAZ</SelectItem>
+                          <SelectItem className="text-white" value="MASURA 100">MASURA 100</SelectItem>
+                          <SelectItem className="text-white" value="MASURA 120">MASURA 120</SelectItem>
+                          <SelectItem className="text-white" value="MASURA 150">MASURA 150</SelectItem>
+                          <SelectItem className="text-white" value="MASURA 200">MASURA 200</SelectItem>
+                          <SelectItem className="text-white" value="CUSTOM">+ Yeni Hammadde Ekle</SelectItem>
                         </SelectContent>
                       </Select>
                     ) : (
@@ -678,9 +678,9 @@ const RawMaterialsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem value="kg">Kilogram (kg)</SelectItem>
-                        <SelectItem value="adet">Adet</SelectItem>
-                        <SelectItem value="litre">Litre</SelectItem>
+                        <SelectItem className="text-white" value="kg">Kilogram (kg)</SelectItem>
+                        <SelectItem className="text-white" value="adet">Adet</SelectItem>
+                        <SelectItem className="text-white" value="litre">Litre</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -703,9 +703,9 @@ const RawMaterialsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem value="TL">TL</SelectItem>
-                        <SelectItem value="USD">USD</SelectItem>
-                        <SelectItem value="EUR">EUR</SelectItem>
+                        <SelectItem className="text-white" value="TL">TL</SelectItem>
+                        <SelectItem className="text-white" value="USD">USD</SelectItem>
+                        <SelectItem className="text-white" value="EUR">EUR</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -926,8 +926,8 @@ const ProductionPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem value="Makine 1">Makine 1</SelectItem>
-                        <SelectItem value="Makine 2">Makine 2</SelectItem>
+                        <SelectItem className="text-white" value="Makine 1">Makine 1</SelectItem>
+                        <SelectItem className="text-white" value="Makine 2">Makine 2</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -994,10 +994,10 @@ const ProductionPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-900 border-gray-700">
-                        <SelectItem value="100">100</SelectItem>
-                        <SelectItem value="120">120</SelectItem>
-                        <SelectItem value="150">150</SelectItem>
-                        <SelectItem value="200">200</SelectItem>
+                        <SelectItem className="text-white" value="100">100</SelectItem>
+                        <SelectItem className="text-white" value="120">120</SelectItem>
+                        <SelectItem className="text-white" value="150">150</SelectItem>
+                        <SelectItem className="text-white" value="200">200</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1579,8 +1579,8 @@ const UsersPage = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-900 border-gray-700">
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="viewer">Görüntüleyici</SelectItem>
+                    <SelectItem className="text-white" value="admin">Admin</SelectItem>
+                    <SelectItem className="text-white" value="viewer">Görüntüleyici</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
