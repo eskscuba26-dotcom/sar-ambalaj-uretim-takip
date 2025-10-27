@@ -123,6 +123,7 @@ class Stock(BaseModel):
     width_cm: float
     length_m: float
     square_meters: float
+    color: Optional[str] = None
     quantity: int
     updated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
@@ -134,6 +135,7 @@ class Shipment(BaseModel):
     width_cm: float
     length_m: float
     square_meters: float
+    color: Optional[str] = None
     quantity: int
     customer_name: str
     vehicle_plate: str
@@ -148,6 +150,7 @@ class ShipmentCreate(BaseModel):
     width_cm: float
     length_m: float
     quantity: int
+    color: Optional[str] = None
     customer_name: str
     vehicle_plate: str
     driver_name: str
