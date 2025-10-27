@@ -467,7 +467,7 @@ const ExchangeRatesPage = () => {
         <div className="p-6">
           <Table>
             <TableHeader>
-              <TableRow className="border-gray-800 hover:bg-gray-900">
+              <TableRow className="border-gray-800 hover:bg-gray-900" className="border-gray-800 hover:bg-gray-900">
                 <TableHead className="text-gray-400">Döviz</TableHead>
                 <TableHead className="text-gray-400">Kur (TL)</TableHead>
                 <TableHead className="text-gray-400">Güncellenme</TableHead>
@@ -476,7 +476,7 @@ const ExchangeRatesPage = () => {
             </TableHeader>
             <TableBody>
               {rates.map((r) => (
-                <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`} className="border-gray-800 hover:bg-gray-900">
+                <TableRow className="border-gray-800 hover:bg-gray-900" key={r.id} data-testid={`exchange-rate-${r.currency}`} className="border-gray-800 hover:bg-gray-900">
                   <TableCell className="font-medium text-white">{r.currency}</TableCell>
                   <TableCell className="text-gray-300">{r.rate.toFixed(2)}</TableCell>
                   <TableCell className="text-gray-400">{new Date(r.updated_at).toLocaleString('tr-TR')}</TableCell>
@@ -484,7 +484,7 @@ const ExchangeRatesPage = () => {
                 </TableRow>
               ))}
               {rates.length === 0 && (
-                <TableRow className="border-gray-800">
+                <TableRow className="border-gray-800 hover:bg-gray-900" className="border-gray-800">
                   <TableCell colSpan={4} className="text-center text-gray-400">
                     Henüz kur girilmemiş
                   </TableCell>
@@ -690,26 +690,26 @@ const RawMaterialsPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Hammadde Adı</TableHead>
-                  <TableHead>Giriş Tarihi</TableHead>
-                  <TableHead>Miktar</TableHead>
-                  <TableHead>Birim</TableHead>
-                  <TableHead>Birim Fiyat</TableHead>
-                  <TableHead>Para Birimi</TableHead>
-                  <TableHead>Toplam Değer</TableHead>
-                  {user?.role === 'admin' && <TableHead>İşlemler</TableHead>}
+                  <TableHead className="text-gray-400">Hammadde Adı</TableHead>
+                  <TableHead className="text-gray-400">Giriş Tarihi</TableHead>
+                  <TableHead className="text-gray-400">Miktar</TableHead>
+                  <TableHead className="text-gray-400">Birim</TableHead>
+                  <TableHead className="text-gray-400">Birim Fiyat</TableHead>
+                  <TableHead className="text-gray-400">Para Birimi</TableHead>
+                  <TableHead className="text-gray-400">Toplam Değer</TableHead>
+                  {user?.role === 'admin' && <TableHead className="text-gray-400">İşlemler</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {materials.map((material) => (
-                  <TableRow key={material.id} data-testid={`material-row-${material.id}`}>
-                    <TableCell className="font-medium">{material.name}</TableCell>
+                  <TableRow className="border-gray-800 hover:bg-gray-900" key={material.id} data-testid={`material-row-${material.id}`}>
+                    <TableCell className="font-medium text-white">{material.name}</TableCell>
                     <TableCell>{new Date(material.entry_date).toLocaleDateString('tr-TR')}</TableCell>
                     <TableCell>{material.quantity.toFixed(2)}</TableCell>
                     <TableCell>{material.unit}</TableCell>
                     <TableCell>{material.price.toFixed(2)}</TableCell>
                     <TableCell>{material.currency}</TableCell>
-                    <TableCell className="font-medium">{material.total_value.toFixed(2)} {material.currency}</TableCell>
+                    <TableCell className="font-medium text-white">{material.total_value.toFixed(2)} {material.currency}</TableCell>
                     {user?.role === 'admin' && (
                       <TableCell>
                         <div className="flex gap-2">
@@ -982,18 +982,18 @@ const ProductionPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tarih</TableHead>
-                  <TableHead>Makine</TableHead>
-                  <TableHead>Model</TableHead>
-                  <TableHead>Metrekare</TableHead>
-                  <TableHead>Adet</TableHead>
-                  <TableHead>Masura</TableHead>
-                  {user?.role === 'admin' && <TableHead>İşlemler</TableHead>}
+                  <TableHead className="text-gray-400">Tarih</TableHead>
+                  <TableHead className="text-gray-400">Makine</TableHead>
+                  <TableHead className="text-gray-400">Model</TableHead>
+                  <TableHead className="text-gray-400">Metrekare</TableHead>
+                  <TableHead className="text-gray-400">Adet</TableHead>
+                  <TableHead className="text-gray-400">Masura</TableHead>
+                  {user?.role === 'admin' && <TableHead className="text-gray-400">İşlemler</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {productions.map((prod) => (
-                  <TableRow key={prod.id} data-testid={`production-row-${prod.id}`}>
+                  <TableRow className="border-gray-800 hover:bg-gray-900" key={prod.id} data-testid={`production-row-${prod.id}`}>
                     <TableCell>{new Date(prod.date).toLocaleDateString('tr-TR')}</TableCell>
                     <TableCell>{prod.machine}</TableCell>
                     <TableCell className="text-sm">
@@ -1092,18 +1092,18 @@ const StockPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Model Adı</TableHead>
-                  <TableHead>Kalınlık (mm)</TableHead>
-                  <TableHead>En (cm)</TableHead>
-                  <TableHead>Uzunluk (m)</TableHead>
-                  <TableHead>Metrekare (m²)</TableHead>
-                  <TableHead>Stok Adedi</TableHead>
+                  <TableHead className="text-gray-400">Model Adı</TableHead>
+                  <TableHead className="text-gray-400">Kalınlık (mm)</TableHead>
+                  <TableHead className="text-gray-400">En (cm)</TableHead>
+                  <TableHead className="text-gray-400">Uzunluk (m)</TableHead>
+                  <TableHead className="text-gray-400">Metrekare (m²)</TableHead>
+                  <TableHead className="text-gray-400">Stok Adedi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {stocks.map((stock) => (
-                  <TableRow key={stock.id} data-testid={`stock-row-${stock.id}`}>
-                    <TableCell className="font-medium">{stock.model_name}</TableCell>
+                  <TableRow className="border-gray-800 hover:bg-gray-900" key={stock.id} data-testid={`stock-row-${stock.id}`}>
+                    <TableCell className="font-medium text-white">{stock.model_name}</TableCell>
                     <TableCell>{stock.thickness_mm}</TableCell>
                     <TableCell>{stock.width_cm}</TableCell>
                     <TableCell>{stock.length_m}</TableCell>
@@ -1246,17 +1246,17 @@ const UsersPage = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Ad Soyad</TableHead>
-                <TableHead>E-posta</TableHead>
-                <TableHead>Rol</TableHead>
-                <TableHead>Kayıt Tarihi</TableHead>
-                <TableHead>İşlemler</TableHead>
+                <TableHead className="text-gray-400">Ad Soyad</TableHead>
+                <TableHead className="text-gray-400">E-posta</TableHead>
+                <TableHead className="text-gray-400">Rol</TableHead>
+                <TableHead className="text-gray-400">Kayıt Tarihi</TableHead>
+                <TableHead className="text-gray-400">İşlemler</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id} data-testid={`user-row-${user.id}`}>
-                  <TableCell className="font-medium">{user.full_name}</TableCell>
+                <TableRow className="border-gray-800 hover:bg-gray-900" key={user.id} data-testid={`user-row-${user.id}`}>
+                  <TableCell className="font-medium text-white">{user.full_name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
