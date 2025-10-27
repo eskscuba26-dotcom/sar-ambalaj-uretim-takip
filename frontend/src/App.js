@@ -452,32 +452,32 @@ const ExchangeRatesPage = () => {
       <div className="bg-white rounded-lg border shadow-sm">
         <div className="p-6">
           <Table>
-              <thead className="[&_tr]:border-b">
-                <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Döviz</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Kur (TL)</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Güncellenme</th>
-                  <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Güncelleyen</th>
-                </tr>
-              </thead>
-              <tbody className="[&_tr:last-child]:border-0">
-                {rates.map((r) => (
-                  <tr key={r.id} data-testid={`exchange-rate-${r.currency}`} className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-medium">{r.currency}</td>
-                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{r.rate.toFixed(2)}</td>
-                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{new Date(r.updated_at).toLocaleString('tr-TR')}</td>
-                    <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">{r.updated_by}</td>
-                  </tr>
-                ))}
-                {rates.length === 0 && (
-                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                    <td colSpan={4} className="p-4 align-middle [&:has([role=checkbox])]:pr-0 text-center text-gray-500">
-                      Henüz kur girilmemiş
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Döviz</TableHead>
+                <TableHead>Kur (TL)</TableHead>
+                <TableHead>Güncellenme</TableHead>
+                <TableHead>Güncelleyen</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rates.map((r) => (
+                <TableRow key={r.id} data-testid={`exchange-rate-${r.currency}`}>
+                  <TableCell className="font-medium">{r.currency}</TableCell>
+                  <TableCell>{r.rate.toFixed(2)}</TableCell>
+                  <TableCell>{new Date(r.updated_at).toLocaleString('tr-TR')}</TableCell>
+                  <TableCell>{r.updated_by}</TableCell>
+                </TableRow>
+              ))}
+              {rates.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center text-gray-500">
+                    Henüz kur girilmemiş
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
           </div>
         </div>
       </div>
