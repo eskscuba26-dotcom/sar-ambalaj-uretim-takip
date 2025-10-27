@@ -307,7 +307,8 @@ const DashboardPage = () => {
   const [stats, setStats] = useState({
     totalMaterials: 0,
     totalProduction: 0,
-    totalStock: 0,
+    normalStock: 0,
+    cutStock: 0,
   });
 
   useEffect(() => {
