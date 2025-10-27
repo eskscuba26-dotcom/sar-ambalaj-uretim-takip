@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import MainLayout from '@/components/MainLayout';
 import { Package, Factory, TrendingUp, Boxes } from 'lucide-react';
