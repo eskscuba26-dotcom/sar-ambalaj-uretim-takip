@@ -338,18 +338,36 @@ const Ebatlama = ({ user, setUser }) => {
                         />
                       </div>
                     </div>
+
+                    <div className="mt-4 space-y-2">
+                      <Label htmlFor="istenen_adet" className="text-zinc-200">İstenen Adet</Label>
+                      <Input
+                        id="istenen_adet"
+                        type="number"
+                        value={formData.istenen_adet}
+                        onChange={(e) => setFormData({ ...formData, istenen_adet: e.target.value })}
+                        className="bg-zinc-800/50 border-zinc-700 text-white"
+                        placeholder="Kaç adet istiyorsunuz?"
+                        required
+                        data-testid="istenen-adet-input"
+                      />
+                    </div>
                   </div>
 
-                  {formData.ebat_en && formData.ebat_boy && selectedProduction && (
+                  {formData.ebat_en && formData.ebat_boy && formData.istenen_adet && selectedProduction && (
                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <p className="text-zinc-400 text-sm mb-1">Tek Parça Metrekare</p>
-                          <p className="text-green-400 text-2xl font-bold">{calculateEbatMetrekare()} m²</p>
+                          <p className="text-zinc-400 text-sm mb-1">Tek Parça m²</p>
+                          <p className="text-green-400 text-xl font-bold">{calculateEbatMetrekare()} m²</p>
                         </div>
                         <div>
-                          <p className="text-zinc-400 text-sm mb-1">Çıkan Adet</p>
-                          <p className="text-green-400 text-2xl font-bold">{calculateCikanAdet()} adet</p>
+                          <p className="text-zinc-400 text-sm mb-1">Tek Ana Üründen</p>
+                          <p className="text-blue-400 text-xl font-bold">{calculateCikanAdet()} adet</p>
+                        </div>
+                        <div>
+                          <p className="text-zinc-400 text-sm mb-1">Tüketilecek Ana Ürün</p>
+                          <p className="text-orange-400 text-xl font-bold">{calculateTuketilenAnaUrun()} adet</p>
                         </div>
                       </div>
                     </div>
