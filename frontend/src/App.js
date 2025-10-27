@@ -1359,6 +1359,16 @@ const ShipmentPage = () => {
                     />
                   </div>
                   <div>
+                    <Label className="text-gray-300" htmlFor="invoice_number">İrsaliye Numarası</Label>
+                    <Input className="bg-gray-900 border-gray-700 text-white"
+                      id="invoice_number"
+                      data-testid="invoice-number-input"
+                      value={formData.invoice_number}
+                      onChange={(e) => setFormData({ ...formData, invoice_number: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
                     <Label className="text-gray-300" htmlFor="thickness">Kalınlık (mm)</Label>
                     <Input className="bg-gray-900 border-gray-700 text-white"
                       id="thickness"
