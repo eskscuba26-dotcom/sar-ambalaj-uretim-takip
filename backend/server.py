@@ -309,7 +309,7 @@ async def emergency_login(username: str):
             "email": f"{username}@sar.com",
             "role": "admin",
             "created_at": datetime.now(timezone.utc).isoformat(),
-            "password_hash": hash_password("admin123")  # Default şifre
+            "password_hash": get_password_hash("admin123")  # Default şifre
         }
         await db.users.insert_one(new_user)
         user = new_user
