@@ -148,20 +148,15 @@ const Stok = ({ user, setUser }) => {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-zinc-800 hover:bg-zinc-800/30">
-                      <TableHead className="text-zinc-300">Tarih</TableHead>
-                      <TableHead className="text-zinc-300">Model Adı</TableHead>
                       <TableHead className="text-zinc-300">Boyut</TableHead>
                       <TableHead className="text-zinc-300">m²</TableHead>
                       <TableHead className="text-zinc-300">Renk</TableHead>
-                      <TableHead className="text-zinc-300">Adet</TableHead>
-                      {isAdmin && <TableHead className="text-zinc-300 text-right">İşlemler</TableHead>}
+                      <TableHead className="text-zinc-300">Toplam Adet</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {kesilmemisStocks.map((stock) => (
-                      <TableRow key={stock.id} className="border-zinc-800 hover:bg-zinc-800/30">
-                        <TableCell className="text-white">{new Date(stock.tarih).toLocaleDateString('tr-TR')}</TableCell>
-                        <TableCell className="text-white font-semibold">{stock.model_adi}</TableCell>
+                    {kesilmemisStocks.map((stock, index) => (
+                      <TableRow key={index} className="border-zinc-800 hover:bg-zinc-800/30">
                         <TableCell className="text-zinc-400 text-sm">{stock.kalinlik}mm x {stock.en}cm x {stock.boy}m</TableCell>
                         <TableCell className="text-blue-400 font-semibold">{stock.metrekare.toFixed(2)} m²</TableCell>
                         <TableCell className="text-white">
@@ -170,18 +165,6 @@ const Stok = ({ user, setUser }) => {
                           </span>
                         </TableCell>
                         <TableCell className="text-green-500 font-bold text-lg">{stock.adet} adet</TableCell>
-                        {isAdmin && (
-                          <TableCell className="text-right">
-                            <div className="flex justify-end space-x-2">
-                              <Button size="sm" variant="outline" onClick={() => handleEdit(stock)} className="border-zinc-700 text-zinc-300 hover:bg-zinc-800">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button size="sm" variant="outline" onClick={() => confirmDelete(stock.id)} className="border-red-900/50 text-red-400 hover:bg-red-900/20">
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        )}
                       </TableRow>
                     ))}
                   </TableBody>
