@@ -111,13 +111,22 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-gray-50">
-      <Card className="w-full max-w-md shadow-lg" data-testid="login-card">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center" data-testid="login-title">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+      <Card className="w-full max-w-md shadow-2xl bg-gray-950 border-gray-800" data-testid="login-card">
+        <CardHeader className="text-center space-y-4">
+          <div className="flex justify-center mb-4">
+            <div className="w-32 h-32 bg-gray-800 rounded-lg flex items-center justify-center border-2 border-gray-700">
+              <div className="text-center">
+                <Factory className="h-12 w-12 text-blue-500 mx-auto mb-2" />
+                <div className="text-white font-bold text-lg">SAR</div>
+                <div className="text-gray-400 text-xs">AMBALAJ</div>
+              </div>
+            </div>
+          </div>
+          <CardTitle className="text-2xl text-white" data-testid="login-title">
             Fabrika Yönetim Sistemi
           </CardTitle>
-          <CardDescription className="text-center" data-testid="login-description">
+          <CardDescription className="text-gray-400" data-testid="login-description">
             {isRegister ? 'Yeni hesap oluştur' : 'Hesabınıza giriş yapın'}
           </CardDescription>
         </CardHeader>
@@ -125,10 +134,11 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {isRegister && (
               <div>
-                <Label htmlFor="fullName">Ad Soyad</Label>
+                <Label htmlFor="fullName" className="text-gray-300">Ad Soyad</Label>
                 <Input
                   id="fullName"
                   data-testid="fullname-input"
+                  className="bg-gray-900 border-gray-700 text-white"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
@@ -136,34 +146,36 @@ const LoginPage = () => {
               </div>
             )}
             <div>
-              <Label htmlFor="email">E-posta</Label>
+              <Label htmlFor="email" className="text-gray-300">E-posta</Label>
               <Input
                 id="email"
                 type="email"
                 data-testid="email-input"
+                className="bg-gray-900 border-gray-700 text-white"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="password">Şifre</Label>
+              <Label htmlFor="password" className="text-gray-300">Şifre</Label>
               <Input
                 id="password"
                 type="password"
                 data-testid="password-input"
+                className="bg-gray-900 border-gray-700 text-white"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <Button type="submit" className="w-full" data-testid="submit-button">
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" data-testid="submit-button">
               {isRegister ? 'Kayıt Ol' : 'Giriş Yap'}
             </Button>
             <Button
               type="button"
               variant="ghost"
-              className="w-full"
+              className="w-full text-gray-400 hover:text-white hover:bg-gray-800"
               data-testid="toggle-auth-button"
               onClick={() => setIsRegister(!isRegister)}
             >
