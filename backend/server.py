@@ -276,6 +276,24 @@ async def login(user_login: UserLogin):
         }
     }
 
+
+# ŞİFRE SIFIRLAMA - GEÇİCİ ENDPOINT (Production için)
+@api_router.post("/auth/reset-password-temp")
+async def reset_password_temp(username: str, new_password: str):
+    """Geçici şifre sıfırlama endpoint'i - Sadece acil durumlar için"""
+    user = await db.users.find_one({"username": username})
+    if not user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    
+    # Yeni şifreyi hashle ve güncelle
+    hashed = hash_password(new_password)
+    await db.users.update_one(
+        {"username": username},
+        {"$set": {"password_hash": hashed}}
+    )
+    
+    return {"message": f"Şifre başarıyla güncellendi: {username}"}
+
 @api_router.get("/auth/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):
     return UserResponse(
