@@ -270,7 +270,7 @@ const Ebatlama = ({ user, setUser }) => {
                   {selectedProduction && (
                     <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                       <h4 className="text-blue-400 font-semibold mb-2">Ana Ürün Bilgileri</h4>
-                      <div className="grid grid-cols-4 gap-3 text-sm">
+                      <div className="grid grid-cols-5 gap-3 text-sm">
                         <div>
                           <p className="text-zinc-500">Kalınlık</p>
                           <p className="text-white font-medium">{selectedProduction.kalinlik} mm</p>
@@ -286,6 +286,18 @@ const Ebatlama = ({ user, setUser }) => {
                         <div>
                           <p className="text-zinc-500">Metrekare</p>
                           <p className="text-white font-medium">{selectedProduction.metrekare.toFixed(2)} m²</p>
+                        </div>
+                        <div>
+                          <p className="text-zinc-500">Renk</p>
+                          <p className="text-white font-medium">
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              selectedProduction.renk === 'Renksiz' 
+                                ? 'bg-zinc-700 text-zinc-300' 
+                                : 'bg-blue-500/20 text-blue-400'
+                            }`}>
+                              {selectedProduction.renk}
+                            </span>
+                          </p>
                         </div>
                       </div>
                     </div>
