@@ -71,9 +71,11 @@ const Stok = ({ user, setUser }) => {
     }
   };
 
-  // Üretimden kesilmemiş stokları grupla
+  // Üretimden kesilmemiş stokları grupla ve ebatlamada tüketilenleri düş
   const getKesilmemisStocks = () => {
     const stockMap = {};
+    
+    // Önce üretimlerden topla
     productions.forEach((prod) => {
       const key = `${prod.kalinlik}-${prod.en}-${prod.boy}-${prod.renk}`;
       if (stockMap[key]) {
@@ -89,7 +91,20 @@ const Stok = ({ user, setUser }) => {
         };
       }
     });
-    return Object.values(stockMap);
+    
+    // Sonra ebatlamada tüketilenleri düş
+    cuttings.forEach((cut) => {
+      // Ana üretimden tüketilen miktarı bul
+      const anaProd = productions.find(p => p.id === cut.production_id);
+      if (anaProd) {
+        const key = `${anaProd.kalinlik}-${anaProd.en}-${anaProd.boy}-${anaProd.renk}`;
+        if (stockMap[key]) {
+          stockMap[key].adet -= cut.tuketilen_ana_urun;
+        }
+      }
+    });
+    
+    return Object.values(stockMap).filter(s => s.adet > 0);
   };
 
   // Ebatlamadan kesilmiş stokları grupla
