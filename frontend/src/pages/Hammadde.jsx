@@ -425,7 +425,12 @@ const Hammadde = ({ user, setUser }) => {
                     </TableCell>
                     <TableCell className="text-zinc-400">{material.para_birimi}</TableCell>
                     <TableCell className="text-green-500 font-semibold">
-                      {(material.miktar * material.birim_fiyat).toFixed(2)} {material.para_birimi}
+                      {calculateTotalInTL(material).toFixed(2)} TL
+                      {material.para_birimi !== 'TL' && (
+                        <span className="text-xs text-zinc-500 block mt-1">
+                          ({(material.miktar * material.birim_fiyat).toFixed(2)} {material.para_birimi})
+                        </span>
+                      )}
                     </TableCell>
                     {isAdmin && (
                       <TableCell className="text-right">
