@@ -1139,11 +1139,11 @@ const StockPage = () => {
                 {stocks.map((stock) => (
                   <TableRow className="border-gray-800 hover:bg-gray-900" key={stock.id} data-testid={`stock-row-${stock.id}`}>
                     <TableCell className="font-medium text-white">{stock.model_name}</TableCell>
-                    <TableCell>{stock.thickness_mm}</TableCell>
-                    <TableCell>{stock.width_cm}</TableCell>
-                    <TableCell>{stock.length_m}</TableCell>
-                    <TableCell>{stock.square_meters.toFixed(2)}</TableCell>
-                    <TableCell className="font-bold text-lg">{stock.quantity}</TableCell>
+                    <TableCell className="text-gray-300">{stock.thickness_mm}</TableCell>
+                    <TableCell className="text-gray-300">{stock.width_cm}</TableCell>
+                    <TableCell className="text-gray-300">{stock.length_m}</TableCell>
+                    <TableCell className="text-gray-300">{stock.square_meters.toFixed(2)}</TableCell>
+                    <TableCell className="font-bold text-lg text-white">{stock.quantity}</TableCell>
                   </TableRow>
                 ))}
                 {stocks.length === 0 && (
