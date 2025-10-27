@@ -1248,6 +1248,7 @@ const ShipmentPage = () => {
         width_cm: parseFloat(formData.width_cm),
         length_m: parseFloat(formData.length_m),
         quantity: parseInt(formData.quantity),
+        color: formData.color === 'none' ? null : formData.color,
       };
 
       if (editingShipment) {
