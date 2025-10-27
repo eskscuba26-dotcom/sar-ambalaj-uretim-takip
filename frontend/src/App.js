@@ -1072,8 +1072,8 @@ const StockPage = () => {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-gray-900" data-testid="stock-title">Stok Durumu</h1>
       
-      <Card>
-        <CardContent className="pt-6">
+      <div className="bg-white rounded-lg border shadow-sm">
+        <div className="p-6">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -1107,8 +1107,8 @@ const StockPage = () => {
               </TableBody>
             </Table>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
