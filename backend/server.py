@@ -141,6 +141,42 @@ class ProductionUpdate(BaseModel):
     masura_tipi: Optional[str] = None
     renk: Optional[str] = None
 
+# Cutting/Sizing Model
+class Cutting(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    tarih: str
+    production_id: str  # Ana üretim ürünü
+    production_name: str  # Ana üretim bilgisi (display için)
+    # Ana ürün bilgileri
+    ana_kalinlik: float  # mm
+    ana_en: float  # cm
+    ana_boy: float  # m
+    ana_metrekare: float  # m²
+    # Ebatlanacak ürün bilgileri
+    ebat_kalinlik: float  # mm
+    ebat_en: float  # cm
+    ebat_boy: float  # cm
+    ebat_metrekare: float  # m² (tek parça)
+    cikan_adet: int  # Kaç adet çıkar
+    created_by: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CuttingCreate(BaseModel):
+    tarih: str
+    production_id: str
+    ebat_kalinlik: float
+    ebat_en: float
+    ebat_boy: float
+
+class CuttingUpdate(BaseModel):
+    tarih: Optional[str] = None
+    production_id: Optional[str] = None
+    ebat_kalinlik: Optional[float] = None
+    ebat_en: Optional[float] = None
+    ebat_boy: Optional[float] = None
+
 # Helper functions
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
