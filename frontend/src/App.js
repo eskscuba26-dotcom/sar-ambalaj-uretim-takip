@@ -1084,7 +1084,7 @@ const ProductionPage = () => {
                 ))}
                 {productions.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={user?.role === 'admin' ? 7 : 6} className="text-center text-gray-400">
+                    <TableCell colSpan={user?.role === 'admin' ? 8 : 7} className="text-center text-gray-400">
                       Henüz üretim kaydı eklenmemiş
                     </TableCell>
                   </TableRow>
