@@ -171,11 +171,8 @@ async def register(user_create: UserCreate):
     # Check if any user exists
     existing_count = await db.users.count_documents({})
     
-    # TEMPORARY FIX FOR TESTING: Force admin role if email contains 'admin_test'
-    if 'admin_test' in user_create.email:
-        user_create.role = "admin"
-    # First user is always admin OR if no admin exists, make this user admin
-    elif existing_count == 0:
+    # First user is always admin
+    if existing_count == 0:
         user_create.role = "admin"
     
     # Check if email already exists
