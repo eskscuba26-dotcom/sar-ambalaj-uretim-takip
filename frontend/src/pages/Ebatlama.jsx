@@ -181,6 +181,7 @@ const Ebatlama = ({ user, setUser }) => {
       ebat_kalinlik: cutting.ebat_kalinlik.toString(),
       ebat_en: cutting.ebat_en.toString(),
       ebat_boy: cutting.ebat_boy.toString(),
+      istenen_adet: cutting.istenen_adet.toString(),
     });
     setDialogOpen(true);
   };
@@ -192,6 +193,7 @@ const Ebatlama = ({ user, setUser }) => {
       ebat_kalinlik: '',
       ebat_en: '',
       ebat_boy: '',
+      istenen_adet: '',
     });
     setSelectedProduction(null);
     setEditingCutting(null);
