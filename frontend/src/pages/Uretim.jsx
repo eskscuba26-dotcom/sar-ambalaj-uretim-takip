@@ -313,15 +313,20 @@ const Uretim = ({ user, setUser }) => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="masura_tipi" className="text-zinc-200">Masura Tipi</Label>
-                      <Input
-                        id="masura_tipi"
+                      <Select
                         value={formData.masura_tipi}
-                        onChange={(e) => setFormData({ ...formData, masura_tipi: e.target.value })}
-                        className="bg-zinc-800/50 border-zinc-700 text-white"
-                        placeholder="Masura tipini giriniz"
-                        required
-                        data-testid="masura-input"
-                      />
+                        onValueChange={(value) => setFormData({ ...formData, masura_tipi: value })}
+                      >
+                        <SelectTrigger className="bg-zinc-800/50 border-zinc-700 text-white" data-testid="masura-select">
+                          <SelectValue placeholder="Masura tipi seçiniz" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
+                          <SelectItem value="Masura 100">Masura 100</SelectItem>
+                          <SelectItem value="Masura 120">Masura 120</SelectItem>
+                          <SelectItem value="Masura 150">Masura 150</SelectItem>
+                          <SelectItem value="Masura 200">Masura 200</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
 
