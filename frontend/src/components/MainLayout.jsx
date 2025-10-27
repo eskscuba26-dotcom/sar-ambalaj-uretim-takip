@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { LogOut, Package, DollarSign, Users, LayoutDashboard, Factory, Scissors } from 'lucide-react';
+import { LogOut, Package, DollarSign, Users, LayoutDashboard, Factory, Scissors, Archive } from 'lucide-react';
 
 const MainLayout = ({ user, setUser, children }) => {
   const navigate = useNavigate();
