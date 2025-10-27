@@ -20,16 +20,20 @@ const Dashboard = ({ user, setUser }) => {
 
   const fetchData = async () => {
     try {
-      const [materialsRes, productionsRes] = await Promise.all([
+      const [materialsRes, productionsRes, cuttingsRes] = await Promise.all([
         axios.get(`${API}/hammadde`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
         axios.get(`${API}/uretim`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
+        axios.get(`${API}/ebatlama`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
       ]);
       setMaterials(materialsRes.data);
       setProductions(productionsRes.data);
+      setCuttings(cuttingsRes.data);
     } catch (error) {
       console.error('Veriler yüklenirken hata:', error);
     } finally {
