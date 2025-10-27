@@ -478,7 +478,6 @@ const ExchangeRatesPage = () => {
               )}
             </TableBody>
           </Table>
-          </div>
         </div>
       </div>
     </div>
