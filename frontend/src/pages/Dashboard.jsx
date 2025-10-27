@@ -107,6 +107,27 @@ const Dashboard = ({ user, setUser }) => {
             </button>
           )}
 
+          <button
+            onClick={() => navigate('/kurlar')}
+            className="group bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-xl p-8 hover:border-green-500/50 transition-all duration-300 text-left"
+            data-testid="kurlar-card"
+          >
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="bg-green-500/10 p-3 rounded-lg group-hover:bg-green-500/20 transition-colors">
+                <DollarSign className="h-8 w-8 text-green-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                Döviz Kurları
+              </h3>
+            </div>
+            <p className="text-zinc-400 text-sm">
+              Güncel döviz kurlarını girin ve yönetin
+            </p>
+            <div className="mt-4 text-green-500 text-sm font-medium group-hover:translate-x-2 transition-transform inline-block">
+              Görüntüle →
+            </div>
+          </button>
+
           {/* Placeholder for future modules */}
           <div className="bg-zinc-900/30 border border-zinc-800 border-dashed rounded-xl p-8 flex items-center justify-center">
             <p className="text-zinc-600 text-sm text-center">
